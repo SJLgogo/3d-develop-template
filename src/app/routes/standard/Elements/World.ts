@@ -280,18 +280,18 @@ export default class World {
 
         this.isReady = true
 
-        setTimeout(() => {
-            this.receiveUserMqtt({ userId: '1', coordinate: [20, 0.2, -5] })
+        // setTimeout(() => {
+        //     this.receiveUserMqtt({ userId: '1', coordinate: [20, 0.2, -5] })
 
-            this.receiveUserMqtt({ userId: '2', coordinate: [0, 0.2, 0] })
+        //     this.receiveUserMqtt({ userId: '2', coordinate: [0, 0.2, 0] })
 
-        });
+        // });
 
-        setTimeout(() => {
-            this.receiveUserMqtt({ userId: '1', lineCoordinate: [[20, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
+        // setTimeout(() => {
+        //     this.receiveUserMqtt({ userId: '1', lineCoordinate: [[20, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
 
-            this.receiveUserMqtt({ userId: '2', lineCoordinate: [[0, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
-        }, 3000);
+        //     this.receiveUserMqtt({ userId: '2', lineCoordinate: [[0, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
+        // }, 3000);
 
         this.camera.ready(() => {
             this.camera.isReady = false
