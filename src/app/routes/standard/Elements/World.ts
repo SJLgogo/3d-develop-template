@@ -20,6 +20,7 @@ import Heatmap from "./Heatmap";
 import { MqttUserParams, Users } from './Users'
 import FlowLight from "./FlowLight";
 import Station from "./Station";
+import Car from "./Car";
 
 interface Config {
     canvas: HTMLCanvasElement,
@@ -96,6 +97,8 @@ export default class World {
 
     declare station: Station
 
+    declare car : Car;
+
     controlsStart = (e: any) => {
 
     }
@@ -152,6 +155,8 @@ export default class World {
 
         this.users = new Users(this.physics, this.clock)
 
+        this.car = new Car(this.physics)
+
         this.flowLight = new FlowLight()
 
         this.init()
@@ -197,13 +202,15 @@ export default class World {
     private render() {
         this.physics.world.step(1 / 60);//更新物理计算
         this.physics.world.fixedStep()
-        this.cannonDebugger.update()
+        // this.cannonDebugger.update()
 
         if (this.isReady) {
 
             this.camera.isReady && this.camera.initUpdate()
 
             this.text.update(this.camera)
+
+            this.car.update()
 
             this.threeStats.begin()
             this.threeStats.end()
@@ -212,7 +219,7 @@ export default class World {
 
             this.users.isReady && this.users.update()
 
-            this.customCube.update()
+            // this.customCube.update()
         }
 
         this.composer.selectedObjects.length ? this.composer.update() : this.renderer.render(this.scene, this.camera.main)
@@ -238,10 +245,9 @@ export default class World {
         // `)
         // this.scene.add(this.text.cSS3DObject)
 
-
         // 自定义Cube
-        this.customCube.build()
-        this.scene.add(this.customCube.model)
+        // this.customCube.build()
+        // this.scene.add(this.customCube.model)
 
         // 区域拥挤
         // this.crowd.build(resources)
@@ -269,8 +275,8 @@ export default class World {
         // this.scene.add(this.downMetro.model)
 
         // 站台
-        this.station.build(resources['station'].scene)
-        this.scene.add(this.station.main)
+        // this.station.build(resources['station'].scene)
+        // this.scene.add(this.station.main)
 
         // 人员数据
         this.users.build({
@@ -278,20 +284,19 @@ export default class World {
         })
         this.scene.add(this.users.main)
 
+        // 车辆
+        this.car.build(resources['model-car'].scene)
+        this.car.setControls()
+        this.scene.add(this.car.main)
+
         this.isReady = true
 
         // setTimeout(() => {
-        //     this.receiveUserMqtt({ userId: '1', coordinate: [20, 0.2, -5] })
+            // this.receiveUserMqtt({ userId: '1', coordinate: [20, 0.2, -5] })
 
-        //     this.receiveUserMqtt({ userId: '2', coordinate: [0, 0.2, 0] })
-
+            // this.receiveUserMqtt({ userId: '2', coordinate: [0, 0.2, 0] })
         // });
 
-        // setTimeout(() => {
-        //     this.receiveUserMqtt({ userId: '1', lineCoordinate: [[20, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
-
-        //     this.receiveUserMqtt({ userId: '2', lineCoordinate: [[0, 0.2, -5], [100, 0.2, -5], [200, 0.2, -5]] })
-        // }, 3000);
 
         this.camera.ready(() => {
             this.camera.isReady = false

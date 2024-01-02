@@ -17,7 +17,7 @@ export default class Controls {
         this.main.enableRotate = true;
         this.main.enablePan = true;
         this.main.enableZoom = true;
-        this.main.target.set(60, 0, 0);
+        this.main.target.set(0, 0, 0);
         this.main.addEventListener('start', (e: any) => config.controlsStart.call(e, this));
         this.main.addEventListener('end', (e: any) => config.controlsEnd.call(e, this));
     }

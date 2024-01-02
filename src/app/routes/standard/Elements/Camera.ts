@@ -25,7 +25,7 @@ export default class Camera {
             position: viewPosition.default.clone(),
             scalar: viewScalar.Loading
         }
-        this.target = new Vector3(60, 0, 0)
+        this.target = new Vector3(0, 0, 0)
         const camera = new PerspectiveCamera(80, width / height, 0.01, 10000)
         camera.position.copy(this.view.position.clone().multiplyScalar(this.view.scalar))
         camera.lookAt(this.target);

@@ -58,8 +58,8 @@ export default class User {
         this.editmodelSize()
         this.mixer = new AnimationMixer(this.model);
         this.gltfAnimation()
+        this.setController()
     }
-
 
 
     private editmodelSize(): void {
@@ -81,10 +81,9 @@ export default class User {
     update(deltaTime: any) {
         try {
             this.mixer.update(deltaTime);
-
             if (this.characterBody) {
                 this.model.position.copy(this.characterBody.position)
-                // this.model.quaternion.copy(this.characterBody.quaternion);
+                this.model.quaternion.copy(this.characterBody.quaternion);
             } else {
                 this.createCharacterBody()
             }
@@ -98,7 +97,7 @@ export default class User {
     createCharacterBody(): void {
         this.createBodyTimer = setTimeout(() => {
             const res: any = threeToCannon(this.model, { type: ShapeType.MESH });
-            this.characterBody = new Body({ mass: 0.9, shape: res.shape, material: this.physics.materials.default });
+            this.characterBody = new Body({ mass: 10, shape: res.shape, material: this.physics.materials.default });
             this.characterBody.position.set(...this.coordinate)
             this.characterBody.angularDamping = 0.9; // 调整这个值以控制阻尼，防止自旋转
             this.physics.world.addBody(this.characterBody)
