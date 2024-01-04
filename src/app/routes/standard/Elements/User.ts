@@ -58,7 +58,6 @@ export default class User {
         this.editmodelSize()
         this.mixer = new AnimationMixer(this.model);
         this.gltfAnimation()
-        this.setController()
     }
 
 
@@ -108,44 +107,6 @@ export default class User {
         })
     }
 
-
-
-    // 人物控制器
-    setController() {
-        if (this.controls) {
-            window.removeEventListener('keydown', this.controls)
-            window.removeEventListener('keyup', this.controls)
-        }
-
-        this.controls = (event: any) => {
-            const up = (event.type == 'keyup')
-
-            if (!up && event.type !== 'keydown') {
-                return
-            }
-
-            switch (event.key) {
-                case 'w':
-                case 'ArrowUp':
-                    this.characterBody.position.z += 1;
-                    break
-                case 's':
-                case 'ArrowDown':
-                    this.characterBody.position.z -= 1;
-                    break
-                case 'a':
-                case 'ArrowLeft':
-                    this.characterBody.position.x -= 1
-                    break
-                case 'd':
-                case 'ArrowRight':
-                    this.characterBody.position.x += 1
-                    break
-            }
-        }
-        window.addEventListener('keydown', this.controls)
-        window.addEventListener('keyup', this.controls)
-    }
 
 
     /** 两点移动 */

@@ -36,29 +36,36 @@ const options = {
     control: {
         maxSteerVal: 0.5,
         maxForce: 380,
-        brakeForce: 20
+        brakeForce: 30
     }
 }
 
-enum SoundName {
-    Engine = 'Engine',
-    Brake = 'Brake'
-}
 
 export default class Car {
     declare model: Group
+
     physics: Physics
 
     options: any
+
     main: Group
+
     declare body: Group
+
     declare wheels: Group
     
     physicsBodies: any
+
     declare vehicle: RaycastVehicle
+
     speed: number
 
     controls: any
+
+    currentTargetIndex:number = 0
+
+    declare shadow: CustomShadow
+
     constructor (physics: Physics) {
 
         this.physics = physics
@@ -73,6 +80,8 @@ export default class Car {
         }
 
         this.speed = 0
+
+        this.shadow = new CustomShadow()
     }
 
     build (model: Group) {
@@ -84,6 +93,10 @@ export default class Car {
 
         this.main.add(this.body)
         this.main.add(this.wheels)
+        this.shadow.build(this.body)
+
+        this.main.add(this.shadow.main)
+
 
         this.vehicle = this.createVehicle()
     }
@@ -156,7 +169,6 @@ export default class Car {
         // wheel-back-right
         const wheelBR = wheelR.clone()
         wheelBR.name = 'wheelBR'
-        // wheelBR.position.set(-0.55, -0.5, -0.7)
         wheels.add(wheelBR)
 
         return wheels
@@ -315,32 +327,31 @@ export default class Car {
         window.addEventListener('keyup', this.controls)
     }
 
-    update () {
+    update() {
         const physicsChassis = this.physicsBodies.chassis
         this.speed = this.body.position.distanceTo(new Vector3(physicsChassis.position.x, physicsChassis.position.y, physicsChassis.position.z))
         this.body.position.copy(physicsChassis.position)
         this.body.quaternion.copy(physicsChassis.quaternion)
 
-        // Update wheels
         for  (let i = 0; i < this.vehicle.wheelInfos.length; i++) {
             this.vehicle.updateWheelTransform(i)
             const wheelInfo = this.vehicle.wheelInfos[i]
             const transform = wheelInfo.worldTransform
             const wheelBody = this.physicsBodies.wheels[i]
             // update physics
-            // wheelBody.position.set(transform.position.x, transform.position.y, transform.position.z)
-            // wheelBody.quaternion.set(transform.quaternion.x, transform.quaternion.y, transform.quaternion.z, transform.quaternion.w)
             wheelBody.position.copy(transform.position)
             wheelBody.quaternion.copy(transform.quaternion)
 
             // update model
             const wheel = this.wheels.children[i]
             wheel.position.copy(wheelBody.position)
-            wheel.quaternion.set(-transform.quaternion.x, -transform.quaternion.y, transform.quaternion.z, transform.quaternion.w)
+            wheel.quaternion.set(-transform.quaternion.x, transform.quaternion.y, -transform.quaternion.z, transform.quaternion.w)
         }
+
+        this.shadow.update()
     }
 
-    destroy () {
+    destroy() {
         this.vehicle.removeFromWorld(this.physics.world)
         this.physicsBodies.wheels.forEach((e: any) => {
             this.physics.world.removeBody(e)

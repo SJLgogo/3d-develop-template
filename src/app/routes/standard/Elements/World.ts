@@ -118,6 +118,7 @@ export default class World {
         this.scene = new Scene()
         this.scene.background = new THREE.Color('rgb(98,98,100)');
 
+
         this.camera = new Camera(this.width, this.height)
         this.renderer = this.createRenderer(config)
         this.css3DRenderer = this.createCssRender()
@@ -164,7 +165,7 @@ export default class World {
 
 
     private init() {
-        this.AxesHelper(200)
+        // this.AxesHelper(200)
         this.initClick()
     }
 
@@ -203,6 +204,7 @@ export default class World {
         this.physics.world.step(1 / 60);//更新物理计算
         this.physics.world.fixedStep()
         // this.cannonDebugger.update()
+        const deltaTime: number = this.clock.getDelta();
 
         if (this.isReady) {
 
@@ -291,13 +293,6 @@ export default class World {
 
         this.isReady = true
 
-        // setTimeout(() => {
-            // this.receiveUserMqtt({ userId: '1', coordinate: [20, 0.2, -5] })
-
-            // this.receiveUserMqtt({ userId: '2', coordinate: [0, 0.2, 0] })
-        // });
-
-
         this.camera.ready(() => {
             this.camera.isReady = false
         })
@@ -367,7 +362,6 @@ export default class World {
     }
 
 
-
     destory(): void {
         this.scene.children.forEach((child) => {
             this.scene.remove(child);
@@ -377,7 +371,6 @@ export default class World {
         this.removeClick();
         this.resources = null;
         this.threeStats.remove()
-
     }
 
 
