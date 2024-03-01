@@ -165,7 +165,7 @@ export default class World {
 
 
     private init() {
-        // this.AxesHelper(200)
+        this.AxesHelper(200)
         this.initClick()
     }
 
@@ -203,7 +203,7 @@ export default class World {
     private render() {
         this.physics.world.step(1 / 60);//更新物理计算
         this.physics.world.fixedStep()
-        // this.cannonDebugger.update()
+        this.cannonDebugger.update()
         const deltaTime: number = this.clock.getDelta();
 
         if (this.isReady) {
@@ -221,7 +221,7 @@ export default class World {
 
             this.users.isReady && this.users.update()
 
-            // this.customCube.update()
+            this.customCube.update()
         }
 
         this.composer.selectedObjects.length ? this.composer.update() : this.renderer.render(this.scene, this.camera.main)
@@ -248,8 +248,8 @@ export default class World {
         // this.scene.add(this.text.cSS3DObject)
 
         // 自定义Cube
-        // this.customCube.build()
-        // this.scene.add(this.customCube.model)
+        this.customCube.build()
+        this.scene.add(this.customCube.model)
 
         // 区域拥挤
         // this.crowd.build(resources)
@@ -281,15 +281,23 @@ export default class World {
         // this.scene.add(this.station.main)
 
         // 人员数据
-        this.users.build({
-            resources: this.resources
-        })
+        // this.users.build({
+        //     resources: this.resources
+        // })
         this.scene.add(this.users.main)
-
         // 车辆
         this.car.build(resources['model-car'].scene)
         this.car.setControls()
         this.scene.add(this.car.main)
+
+        // setTimeout(() => {
+        //     // this.receiveUserMqtt({ userId: '1', coordinate: [25, 0.2, -5], userColorStatus: 1 })
+        //     this.receiveUserMqtt({ userId: '3', coordinate: [25, 0, -5] })
+        //     setTimeout(() => {
+        //         this.receiveUserMqtt({ userId: '3', lineCoordinate: [[25, 0, -5], [75, 0, -5]]})
+        //     }, 2000);
+        // })
+        
 
         this.isReady = true
 

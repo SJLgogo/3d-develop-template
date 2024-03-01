@@ -83,10 +83,16 @@ var demo = `
  */
 var demo = `
     void mainImage(out vec4 fragColor , in vec2 fragCoord){
-        step(edge,x)
+        float c =  step(edge,x)
     }
 `
 
 /**
- * 
+ * 平滑阶梯函数
+ * 边界值比step函数要多一个，
+ * 我们可以将它的边界值定为edge1和edge2：
+ * 如果目标值x小于边界值edge1，则返回 0；如果目标值x大于边界值edge2，则返回 1；如果目标值x在 2 个边界值之间，则返回从 0 到 1 平滑过渡的值。
  */
+var demo = `
+    float c = smoothstep(edge1,edge2,x)
+`

@@ -1,15 +1,25 @@
-import { BoxGeometry, MeshBasicMaterial, Mesh, CanvasTexture, PlaneGeometry, ShaderMaterial, SphereGeometry, Vector3 } from "three";
+import { BoxGeometry, MeshBasicMaterial, Mesh, CanvasTexture, PlaneGeometry, ShaderMaterial, SphereGeometry, Vector3, Vector2 } from "three";
 import Physics from "./Physics";
-import { Body, SHAPE_TYPES, Sphere, Vec3 } from "cannon-es";
+import { Body, Quaternion, SHAPE_TYPES, Sphere, Vec3 } from "cannon-es";
 import createShielMaterial from '../materials/createShieldMaterial'
 import debounce from '../utiles/debounce'
 import { gsap } from 'gsap'
 import { vertexShader, fragmentShader } from '../glsl/glsl'
 import { from } from "rxjs";
 import * as TWEEN from '@tweenjs/tween.js';
+import { PhysicalBody } from "./PhysicalBody";
 
 
-export default class CustomCube {
+export default class CustomCube{
+
+    path:any[]=[
+        {x:15, z:20},
+        {x:200, z:100},
+    ]
+
+    targetMoveIdx = 0
+
+    forceMagnitude:number = 100
 
     model: any;
 
@@ -19,40 +29,53 @@ export default class CustomCube {
 
     material: any;
 
-    stoppingDistance: number = 1.0 // 停止施加力的阈值
+    targetPoint = new Vec3();
 
     declare towPointBodyMoveCb: () => void;
 
+    declare physicalBody:PhysicalBody;
+
+
     constructor(physics: Physics) {
         this.physics = physics
+        // this.physicalBody = new PhysicalBody({
+        //     physics:physics
+        // })
         this.material = createShielMaterial()
     }
 
 
     build(): void {
         const geometry = new SphereGeometry(1, 32, 32)
-        const material = new MeshBasicMaterial({
-            color: 0xffffff,
-        });
+        const material = this.customShader()
         this.model = new Mesh(geometry, material);
+        // this.physicalBody.createBody()
 
-        this.characterBody = this.createCircleBody()
-        this.characterBody.position.set(50, 50, -5)
-        // this.characterBody.collisionResponse = false; // 禁用初始碰撞
-        this.physics.world.addBody(this.characterBody)
-
-        this.characterBody.addEventListener('collide', (event: any) => {
-            console.log('碰撞', event);
-        });
-
-        // this.bodyTwoPointMoveByPosition()
+        // setTimeout(()=>{
+        //     this.moveForce()
+        // })
     }
 
     update(): void {
-        this.model.position.copy(this.characterBody.position);
-        this.model.quaternion.copy(this.characterBody.quaternion);
+        if(this.physicalBody?.hasBody()){
+            // console.log(this.physicalBody.getPosition());
+            this.model.position.copy(this.physicalBody.getPosition());
+            this.model.quaternion.copy(this.physicalBody.getQuaternion());
+            this.moveUpdate()
+        }
+    }
 
-        // this.towPointBodyMoveCb && this.towPointBodyMoveCb()
+    moveUpdate():void{
+        if(!this.path || this.targetMoveIdx > this.path.length-1){
+            return
+        }
+
+        if(Math.abs(this.physicalBody.body.position.x - this.path[this.targetMoveIdx].x ) <=1  &&  Math.abs(this.physicalBody.body.position.z - this.path[this.targetMoveIdx].z ) <=1){
+            console.log('到达一个点',this.physicalBody.body.position);
+            this.targetMoveIdx++
+            this.stop()
+            this.targetMoveIdx <= this.path.length-1 && this.refersh()
+        }
     }
 
     createCircleBody(): any {
@@ -63,58 +86,53 @@ export default class CustomCube {
     }
 
 
-    /** 刚体模型实现两点移动 */
-    bodyTwoPointMoveByForce(): void {
-        const end = new Vector3(10, 50, 0);
-        const forceMagnitude = 5;
-        const force = new Vec3(end.x, end.y, end.z).scale(forceMagnitude);
-        this.characterBody.applyForce(force, this.characterBody.position);
-
-
-        this.towPointBodyMoveCb = () => {
-            // const distance = new Vector3().copy(new Vector3(100, 50, 0)).sub(this.model.position).length()
-            const distance = this.characterBody.position.distanceTo(new Vector3(10, 50, 0));
-            console.log(distance);
-            if (distance < this.stoppingDistance) {
-                this.bodyVelocityStop()
-            }
-        }
-
+    /** 刚体模型暂停 */
+    stop():void{
+        // 清除物体上的所有力和扭矩
+        this.physicalBody.body.force.set(0, 0, 0);
+        this.physicalBody.body.torque.set(0, 0, 0);
+        // 将速度和角速度都设置为零
+        this.physicalBody.body.velocity.set(0, 0, 0);
+        this.physicalBody.body.angularVelocity.set(0, 0, 0);
     }
 
 
-    /** 修改刚体模型坐标移动刚体 */
-    bodyTwoPointMoveByPosition(): void {
-        const animate = () => {
-            requestAnimationFrame(animate);
-            TWEEN.update();
-        }
-        const end = new Vector3(100, 0, 0);
-        new TWEEN.Tween(this.characterBody.position)
-            .to(end, 10000)
-            .onStart(() => {
-            })
-            .easing(TWEEN.Easing.Quadratic.InOut)
-            .onComplete(() => {
-            })
-            .start();
+    /** 20240221物体移动 */
+    moveForce():void{
+        const forceMagnitude = 100; // 力的大小
+        const currentPos = new Vector2(this.physicalBody.body.position.x, this.physicalBody.body.position.z);
+        const nextPos = new Vector2(this.path[this.targetMoveIdx].x, this.path[this.targetMoveIdx].z);
+        const direction = nextPos.clone().sub(currentPos).normalize(); 
 
-        animate()
+        const force = new Vec3(direction.x * forceMagnitude, 0, direction.y * forceMagnitude); // 构造力向量
+
+
+        this.physicalBody.body.applyForce(force, this.physicalBody.body.position)
     }
 
+    refersh():void{
+        const forceMagnitude = 100; // 力的大小
+        const currentPos = new Vector2(this.physicalBody.body.position.x, this.physicalBody.body.position.z);
+        const nextPos = new Vector2(this.path[this.targetMoveIdx].x, this.path[this.targetMoveIdx].z);
+        const direction = nextPos.clone().sub(currentPos).normalize(); 
 
-    /** 刚体模型停止 */
-    bodyVelocityStop(): void {
-        this.characterBody.velocity.set(0, 0, 0);
+        const force = new Vec3(direction.x * forceMagnitude, 0, direction.y * forceMagnitude); // 构造力向量
+
+        this.physicalBody.body.applyForce(force, this.physicalBody.body.position)
     }
+
+    customShader(): any {
+        const material = new ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader
+        })
+
+        return material
+    }
+
 
 
 }
-
-
-
-
-
 
 
 /**
@@ -145,13 +163,6 @@ export default class CustomCube {
     }
 
 
-    customShader(): any {
-        const material = new ShaderMaterial({
-            vertexShader: vertexShader,
-            fragmentShader: fragmentShader
-        })
-
-        return material
-    }
+   
  * 
  */
