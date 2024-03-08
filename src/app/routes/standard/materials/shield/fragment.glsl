@@ -10,6 +10,7 @@ void main () {
 
     if (vModelPosition.z > (uHeight - .1) || vModelPosition.z < 0.25) {
         discard;
+        
     }
 
     gl_FragColor = vec4(uColor, opacity);   

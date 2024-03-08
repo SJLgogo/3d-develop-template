@@ -21,6 +21,7 @@ import { MqttUserParams, Users } from './Users'
 import FlowLight from "./FlowLight";
 import Station from "./Station";
 import Car from "./Car";
+import { ShaderDemo } from "./ShaderDemo";
 
 interface Config {
     canvas: HTMLCanvasElement,
@@ -99,6 +100,8 @@ export default class World {
 
     declare car : Car;
 
+    declare shaderDemo:ShaderDemo
+
     controlsStart = (e: any) => {
 
     }
@@ -159,6 +162,8 @@ export default class World {
         this.car = new Car(this.physics)
 
         this.flowLight = new FlowLight()
+
+        this.shaderDemo = new ShaderDemo()
 
         this.init()
     }
@@ -249,7 +254,7 @@ export default class World {
 
         // 自定义Cube
         this.customCube.build()
-        this.scene.add(this.customCube.model)
+        // this.scene.add(this.customCube.model)
 
         // 区域拥挤
         // this.crowd.build(resources)
@@ -290,13 +295,9 @@ export default class World {
         this.car.setControls()
         this.scene.add(this.car.main)
 
-        // setTimeout(() => {
-        //     // this.receiveUserMqtt({ userId: '1', coordinate: [25, 0.2, -5], userColorStatus: 1 })
-        //     this.receiveUserMqtt({ userId: '3', coordinate: [25, 0, -5] })
-        //     setTimeout(() => {
-        //         this.receiveUserMqtt({ userId: '3', lineCoordinate: [[25, 0, -5], [75, 0, -5]]})
-        //     }, 2000);
-        // })
+        // Shader
+        this.shaderDemo.build()
+        this.scene.add(this.shaderDemo.model)
         
 
         this.isReady = true

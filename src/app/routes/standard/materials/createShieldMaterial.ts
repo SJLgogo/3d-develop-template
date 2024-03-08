@@ -40,7 +40,7 @@ export default function (color: Color = new Color('red')) {
                 value: color
             },
             uHeight: {
-                value: 0
+                value: 10
             }
         }
     })
