@@ -6,6 +6,7 @@ import * as THREE from "three";
 import * as  SkeletonUtils from 'three/examples/jsm/utils/SkeletonUtils';
 import * as TWEEN from '@tweenjs/tween.js';
 import Queue from "../utiles/Queue";
+import { CapsuleCollider } from "../physics/CapsuleCollider";
 
 interface UserConfig {
     userId: string,
@@ -43,6 +44,11 @@ export default class User {
 
     createBodyTimer: any;
 
+    characterCapsule:any;
+
+	public declare raycastBox: THREE.Mesh;
+
+
     constructor(config: UserConfig, resources: any) {
         this.physics = config.physics
         this.userId = config.userId
@@ -58,6 +64,7 @@ export default class User {
         this.editmodelSize()
         this.mixer = new AnimationMixer(this.model);
         this.gltfAnimation()
+        this.createBody()
     }
 
 
@@ -68,7 +75,7 @@ export default class User {
 
     public gltfAnimation(): void {
         try {
-            const animationClip = this.resources['man-walk-animation']
+            const animationClip = this.resources['man-stand-animation']
             const action = this.mixer.clipAction(animationClip);
             action.play();
         } catch (error) {
@@ -80,17 +87,56 @@ export default class User {
     update(deltaTime: any) {
         try {
             this.mixer.update(deltaTime);
-            if (this.characterBody) {
-                this.model.position.copy(this.characterBody.position)
-                this.model.quaternion.copy(this.characterBody.quaternion);
-            } else {
-                this.createCharacterBody()
+            if (this.characterCapsule) {
+                const {x,y,z}=this.characterCapsule.body.position
+                this.model.position.copy(new Vec3(x, 0 ,z))
+                this.model.quaternion.copy(this.characterCapsule.body.quaternion);
             }
         } catch (error) {
             console.log(error);
         }
     }
 
+    /** 创建胶体模型 */
+    createBody(){
+        this.characterCapsule = new CapsuleCollider({
+			mass: 1,
+			position: new Vec3(10,1,0),
+			height: 1,
+			radius: 0.3,
+			segments: 2,
+			friction: 0.0
+		});
+
+        this.characterCapsule.body.allowSleep = false;
+		this.characterCapsule.body.collisionFilterGroup = 2;
+		this.characterCapsule.body.fixedRotation = true;
+		this.characterCapsule.body.updateMassProperties();
+
+
+        this.physics.world.addBody(this.characterCapsule.body);
+    }
+
+    physicsPreStep(body: Body, character: any): void
+	{
+		character.feetRaycast();
+
+		// Raycast debug
+		if (character.rayHasHit)
+		{
+			if (character.raycastBox.visible) {
+				character.raycastBox.position.x = character.rayResult.hitPointWorld.x;
+				character.raycastBox.position.y = character.rayResult.hitPointWorld.y;
+				character.raycastBox.position.z = character.rayResult.hitPointWorld.z;
+			}
+		}
+		else
+		{
+			if (character.raycastBox.visible) {
+				character.raycastBox.position.set(body.position.x, body.position.y - character.rayCastLength - character.raySafeOffset, body.position.z);
+			}
+		}
+	}
 
     /** 创建刚体模型 */
     createCharacterBody(): void {

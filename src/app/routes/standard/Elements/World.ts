@@ -119,7 +119,7 @@ export default class World {
         this.clock = new Clock()
 
         this.scene = new Scene()
-        this.scene.background = new THREE.Color('rgb(98,98,100)');
+        // this.scene.background = new THREE.Color('rgb(98,98,100)');
 
 
         this.camera = new Camera(this.width, this.height)
@@ -286,10 +286,14 @@ export default class World {
         // this.scene.add(this.station.main)
 
         // 人员数据
-        // this.users.build({
-        //     resources: this.resources
-        // })
+        this.users.build({
+            resources: this.resources
+        })
         this.scene.add(this.users.main)
+
+        this.users.addUser({userId:'1' , coordinate:[0,0,10]})
+
+
         // 车辆
         this.car.build(resources['model-car'].scene)
         this.car.setControls()
@@ -298,6 +302,8 @@ export default class World {
         // Shader
         this.shaderDemo.build()
         this.scene.add(this.shaderDemo.model)
+
+
         
 
         this.isReady = true

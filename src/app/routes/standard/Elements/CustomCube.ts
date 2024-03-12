@@ -50,7 +50,6 @@ export default class CustomCube{
         const material = this.customShader()
         this.model = new Mesh(geometry, material);
         // this.physicalBody.createBody()
-
         // setTimeout(()=>{
         //     this.moveForce()
         // })
