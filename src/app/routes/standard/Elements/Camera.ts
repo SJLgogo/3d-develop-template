@@ -5,11 +5,10 @@ const viewPosition = {
     default: new Vector3(1, 1, 1).normalize(),
 }
 
-// 1向量代表的相机位置 {x: 0.5773502691896258, y: 0.5773502691896258, z: 0.5773502691896258}
 
 enum viewScalar {
-    Loading = 300,
-    Ready = 50,
+    Loading = 6000,
+    Ready = 3000,
 }
 
 export default class Camera {

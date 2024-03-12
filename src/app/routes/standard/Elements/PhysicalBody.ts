@@ -18,11 +18,11 @@ export class PhysicalBody{
 
     
     /** 创建刚体模型 */
-    createBody():void{
+    createBody(position:number[]):void{
         this.body = this.createCircleBody()
-        this.setPosition(10, 2 , 10)
+        this.setPosition(position[0],position[1],position[2])
         this.addBodyToPhysics()
-        this.collideListener()
+        // this.collideListener()
     }
 
     /** 增加到物理世界 */
@@ -38,15 +38,15 @@ export class PhysicalBody{
     /** 碰撞检测 */
     collideListener():void{
         this.body.addEventListener('collide', (event: any) => {
-            console.log('碰撞', event);
+             
         });
     }
 
     /** 创建球体 */
     createCircleBody(): any {
-        var radius = 1; 
+        var radius = 50; 
         var sphereShape = new Sphere(radius);
-        var sphereBody = new Body({ mass: 0.9, shape: sphereShape, material: this.physics.materials.default });
+        var sphereBody = new Body({ mass: 0.5, shape: sphereShape, material: this.physics.materials.default });
         return sphereBody
     }
 
@@ -65,6 +65,15 @@ export class PhysicalBody{
     destory():void{
 
     }
+
+     /** 刚体模型停止移动 */
+    stop(): void {
+        this.body.force.set(0, 0, 0);
+        this.body.torque.set(0, 0, 0);
+        this.body.velocity.set(0, 0, 0);
+        this.body.angularVelocity.set(0, 0, 0);
+    }
+
 
 
 

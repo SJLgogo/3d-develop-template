@@ -30,7 +30,7 @@ export default class Physics {
 
     private createWorld() {
         const world = new World()
-        world.gravity.set(0, -9.82, 0)
+        world.gravity.set(0, -982, 0)
         world.broadphase = new SAPBroadphase(world) // 设置（Broadphase）为 SAPBroadphase，这是一种高效的碰撞检测算法
         world.allowSleep = true // 允许物体在静止时休眠，以提高性能
         world.defaultContactMaterial.friction = 0 // 摩擦系数为 0
@@ -47,7 +47,7 @@ export default class Physics {
             materials.default,
             {
                 friction: 0,  // 摩擦系数
-                restitution: 0.3 // 恢复系数
+                restitution: 0.2 // 恢复系数
             }
         );
         this.world.addContactMaterial(defaultContactMaterial)

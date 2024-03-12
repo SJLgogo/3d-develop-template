@@ -5,7 +5,7 @@ import * as THREE from "three";
 import Physics from "./Physics";
 import CannonDebugger from 'cannon-es-debugger'
 import User from "./User";
-import { Body, BodyType, ShapeType } from "cannon-es";
+import { Body, BodyType, Quaternion, ShapeType, Vec3 } from "cannon-es";
 import Light from "./Light";
 import { gsap } from 'gsap'
 import CustomCube from "./CustomCube";
@@ -22,6 +22,10 @@ import FlowLight from "./FlowLight";
 import Station from "./Station";
 import Car from "./Car";
 import { ShaderDemo } from "./ShaderDemo";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { BoxCollider } from "../physics/BoxCollider";
+import { CollisionGroups } from "../../sketch/world/CollisionGroups";
+import { TrimeshCollider } from "../physics/TrimeshCollider";
 
 interface Config {
     canvas: HTMLCanvasElement,
@@ -209,6 +213,7 @@ export default class World {
         this.physics.world.step(1 / 60);//更新物理计算
         this.physics.world.fixedStep()
         this.cannonDebugger.update()
+        
         const deltaTime: number = this.clock.getDelta();
 
         if (this.isReady) {
@@ -217,7 +222,7 @@ export default class World {
 
             this.text.update(this.camera)
 
-            this.car.update()
+            // this.car.update()
 
             this.threeStats.begin()
             this.threeStats.end()
@@ -252,9 +257,7 @@ export default class World {
         // `)
         // this.scene.add(this.text.cSS3DObject)
 
-        // 自定义Cube
-        this.customCube.build()
-        // this.scene.add(this.customCube.model)
+     
 
         // 区域拥挤
         // this.crowd.build(resources)
@@ -286,25 +289,89 @@ export default class World {
         // this.scene.add(this.station.main)
 
         // 人员数据
-        this.users.build({
-            resources: this.resources
-        })
-        this.scene.add(this.users.main)
+        // this.users.build({
+        //     resources: this.resources
+        // })
+        // this.scene.add(this.users.main)
 
-        this.users.addUser({userId:'1' , coordinate:[0,0,10]})
+        // this.users.addUser({userId:'1' , coordinate:[0,0,10]})
 
 
-        // 车辆
-        this.car.build(resources['model-car'].scene)
-        this.car.setControls()
-        this.scene.add(this.car.main)
+        // // 车辆
+        // this.car.build(resources['model-car'].scene)
+        // this.car.setControls()
+        // this.scene.add(this.car.main)
 
-        // Shader
-        this.shaderDemo.build()
-        this.scene.add(this.shaderDemo.model)
-
+        // // Shader
+        // this.shaderDemo.build()
+        // this.scene.add(this.shaderDemo.model)
 
         
+        new FBXLoader().load("assets/sketch/HZDD.fbx" , (e)=>{
+            e.traverse((child:any) => {
+      
+              if(child.name.includes('_Gate') || child.name=='立方体004'|| child.name=='立方体005' || child.name=='立方体003' || child.name.includes('elevator') || child.name.includes('stair') || child.name.includes('Fence')  || child.name.includes('obstacle')){
+                let phys = new TrimeshCollider(child, {});
+                phys.body && this.physics.world.addBody(phys.body);
+              }
+
+              if(child.name=='ground'|| child.name.includes('equipment') ){
+                let phys = new BoxCollider({size: new THREE.Vector3(child.scale.x, child.scale.y, child.scale.z)});
+                        phys.body.position.copy(this.cannonVector(child.position));
+                        phys.body.quaternion.copy(this.cannonQuat(child.quaternion));
+                        if( phys.body.hasOwnProperty('computeAABB')){
+                          phys.body.computeAABB()
+                        }
+        
+                        phys.body.shapes.forEach((shape:any) => {
+                          shape.collisionFilterMask = ~CollisionGroups.TrimeshColliders;
+                        });
+        
+                        this.physics.world.addBody(phys.body);
+              }
+      
+              if (child.hasOwnProperty('userData'))
+              {
+                if (child.userData.hasOwnProperty('data'))
+                console.log(child , child.userData);
+                {
+                  if (child.userData.data === 'physics')
+                  {
+                    if (child.userData.hasOwnProperty('type')) 
+                    {
+                      if (child.userData.type === 'box')
+                      {
+                        let phys = new BoxCollider({size: new THREE.Vector3(child.scale.x, child.scale.y, child.scale.z)});
+                        phys.body.position.copy(this.cannonVector(child.position));
+                        phys.body.quaternion.copy(this.cannonQuat(child.quaternion));
+                        if( phys.body.hasOwnProperty('computeAABB')){
+                          phys.body.computeAABB()
+                        }
+        
+                        phys.body.shapes.forEach((shape:any) => {
+                          shape.collisionFilterMask = ~CollisionGroups.TrimeshColliders;
+                        });
+        
+                        this.physics.world.addBody(phys.body);
+                      }
+                      else if (child.userData.type === 'trimesh')
+                      {
+                        let phys = new TrimeshCollider(child, {});
+                        phys.body && this.physics.world.addBody(phys.body);
+                      }
+        
+                      child.visible = false;
+                    }
+                  }
+                }
+              }
+            });
+            this.scene.add(e)
+          })  
+      
+        // 自定义Cube
+        // this.customCube.build()
+        // this.scene.add(this.customCube.model)
 
         this.isReady = true
 
@@ -313,6 +380,16 @@ export default class World {
         })
     }
 
+    cannonVector(vec: THREE.Vector3): Vec3
+    {
+      return new Vec3(vec.x, vec.y, vec.z);
+    }
+
+
+    cannonQuat(quat: THREE.Quaternion): Quaternion
+    {
+        return new Quaternion(quat.x, quat.y, quat.z, quat.w);
+    }
 
     initClick(): void {
         this.raycaster = new Raycaster();

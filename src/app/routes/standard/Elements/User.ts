@@ -88,9 +88,9 @@ export default class User {
         try {
             this.mixer.update(deltaTime);
             if (this.characterCapsule) {
-                const {x,y,z}=this.characterCapsule.body.position
-                this.model.position.copy(new Vec3(x, 0 ,z))
-                this.model.quaternion.copy(this.characterCapsule.body.quaternion);
+                // const {x,y,z}=this.characterCapsule.body.position
+                // this.model.position.copy(new Vec3(x, 0 ,z))
+                // this.model.quaternion.copy(this.characterCapsule.body.quaternion);
             }
         } catch (error) {
             console.log(error);
@@ -103,7 +103,7 @@ export default class User {
 			mass: 1,
 			position: new Vec3(10,1,0),
 			height: 1,
-			radius: 0.3,
+			radius: 0.2,
 			segments: 2,
 			friction: 0.0
 		});
