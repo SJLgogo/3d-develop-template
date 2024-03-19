@@ -24,12 +24,14 @@ export class BoxCollider
 
 		let shape:any = new CANNON.Box(options.size);
 
-		let physBox = new CANNON.Body({
-			mass: options.mass,
-			position: options.position,
-			shape:shape
-		});
+		if (shape) {
+			let physBox = new CANNON.Body({
+				mass: options.mass,
+				position: options.position,
+				shape:shape
+			});
+			this.body = physBox;
+		}
 		
-		this.body = physBox;
 	}
 }

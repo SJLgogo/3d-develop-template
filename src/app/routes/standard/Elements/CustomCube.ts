@@ -1,4 +1,4 @@
-import { BoxGeometry, MeshBasicMaterial, Mesh, CanvasTexture, PlaneGeometry, ShaderMaterial, SphereGeometry, Vector3, Vector2 } from "three";
+import { BoxGeometry, MeshBasicMaterial, Mesh, CanvasTexture, PlaneGeometry, ShaderMaterial, SphereGeometry, Vector3, Vector2, CylinderGeometry } from "three";
 import Physics from "./Physics";
 import { Body, Quaternion, SHAPE_TYPES, Sphere, Vec3 } from "cannon-es";
 import createShielMaterial from '../materials/createShieldMaterial'
@@ -13,10 +13,10 @@ import { PhysicalBody } from "./PhysicalBody";
 export default class CustomCube{
 
     movePath:any[]=[
+        {x: 976.5903624549146 , z:-71},
+        {x: 1500.5903624549146 , z:-71},
         {x:3000, z:-366},
-        {x:4000, z:-366},
-        // {x:2200, z:-180},
-        // {x:4200, z:-250},
+        {x:3300, z:-366},
     ]
 
     // 200, 630 , -20
@@ -41,6 +41,8 @@ export default class CustomCube{
 
     isMoving:boolean =false
 
+    startTime:any;
+
 
     constructor(physics: Physics) {
         this.physics = physics
@@ -51,33 +53,41 @@ export default class CustomCube{
     }
 
 
-    build(): void {
+    build(config:any): void {
+        const position = config.position
+        this.movePath = config.movePath
+        // const geometry = new CylinderGeometry(25, 25, 100, 20); // 参数分别为：顶部半径，底部半径，高度，圆柱体的面数
         const geometry = new SphereGeometry(25, 32, 32)
         const material = this.customShader()
         this.model = new Mesh(geometry, material);
-        this.physicalBody.createBody([2000, 670 , -366])
-    
+        this.physicalBody.createBody(position)
     }
 
     update(): void {
         if(this.physicalBody?.hasBody()){
-            // console.log(this.physicalBody.getPosition());
             this.model.position.copy(this.physicalBody.getPosition());
             this.model.quaternion.copy(this.physicalBody.getQuaternion());
-            this.moveUpdate()
+            this.movePath?.length && this.moveUpdate()
         }
     }
     moveUpdate(): void {
+        var endTime;
         if (this.isMoving == false && this.moveTargetIdx == 0 && this.movePath.length) {
+            this.startTime = Date.now();
             this.addForce()
             return
         }
 
         if (this.movePath.length == 0 || this.moveTargetIdx > this.movePath.length || this.isMoving == false) return
 
+        // console.log(this.physicalBody.body.position.x  , this.physicalBody.body.position.z , Math.abs(this.physicalBody.body.position.x - this.movePath[this.moveTargetIdx].x) , Math.abs(this.physicalBody.body.position.z - this.movePath[this.moveTargetIdx].z));
 
-        if (Math.abs(this.physicalBody.body.position.x - this.movePath[this.moveTargetIdx].x) <= 1 && Math.abs(this.physicalBody.body.position.z - this.movePath[this.moveTargetIdx].z) <= 1) {
-            console.log('到达一个点', this.physicalBody.body.position);
+        if (Math.abs(this.physicalBody.body.position.x - this.movePath[this.moveTargetIdx].x) <= 100 && Math.abs(this.physicalBody.body.position.z - this.movePath[this.moveTargetIdx].z) <= 100 ) {
+            // console.log('到达一个点', this.physicalBody.body.position);
+            // console.log('结束',this.physicalBody);
+            endTime = Date.now();
+            const elapsedTime = endTime - this.startTime!
+            // console.log(`执行时间: ${elapsedTime} 毫秒`);
             this.moveTargetIdx++
             this.physicalBody.stop()
 
@@ -91,13 +101,19 @@ export default class CustomCube{
 
     addForce(): void {
         this.isMoving = true
-        const forceMagnitude = 10000; // 力的大小
+        const speedMagnitude = 100
+        const forceMagnitude = 4000; // 力的大小
         const currentPos = new Vector2(this.physicalBody.body.position.x, this.physicalBody.body.position.z);
         const nextPos = new Vector2(this.movePath[this.moveTargetIdx].x, this.movePath[this.moveTargetIdx].z);
         const direction = nextPos.clone().sub(currentPos).normalize();
 
-        const force = new Vec3(direction.x * forceMagnitude, 0, direction.y * forceMagnitude); // 构造力向量
-        this.physicalBody.body.applyForce(force, this.physicalBody.body.position)
+        // const force = new Vec3(direction.x * forceMagnitude, 0, direction.y * forceMagnitude); // 构造力向量
+        // this.physicalBody.body.applyForce(force, this.physicalBody.body.position)
+
+        // 直接设置物理体的速度
+        const velocity = new Vec3(direction.x * speedMagnitude, 0, direction.y * speedMagnitude);
+        this.physicalBody.body.velocity.set(velocity.x, velocity.y, velocity.z);
+       
     }
 
     createCircleBody(): any {

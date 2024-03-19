@@ -10,6 +10,7 @@ import { TrimeshCollider } from "./TrimeshCollider";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { BoxCollider } from "./BoxCollider";
 import { CollisionGroups } from "./CollisionGroups";
+import { Character } from "./Character";
 
 
 export class SktechWorld {
@@ -20,23 +21,32 @@ export class SktechWorld {
 
   public declare scene: THREE.Scene;
 
+  clock:any;
+
+
   public declare physicsWorld: any;
   public sky: Sky;
   public updatables: any[] = [];
   public timeScaleTarget: number = 1;
   controller: any;
   declare cannonDebugger: any;
+  player:any;
+
+
+  requestDelta:any;
 
   constructor() {
-    this.initRender()
+    this.clock = new THREE.Clock();
     this.initCamera()
-    this.generateHTML()
     this.initPhysicsWord()
-    this.AxesHelper(1000)
+    this.initRender()
+    this.generateHTML()
+    this.loadGround()
+    // this.AxesHelper(1000)
     this.sky = new Sky(this);
     this.initContorller()
-    this.loadGltf()
-    this.render(this);
+    // this.loadGltf()
+    this.loadMan()
   }
 
   initContorller() {
@@ -54,6 +64,7 @@ export class SktechWorld {
     this.renderer.toneMappingExposure = 1.0;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.setAnimationLoop(this.render.bind(this))
   }
 
   initCamera() {
@@ -63,7 +74,7 @@ export class SktechWorld {
     this.camera.lookAt(0, 0, 0);
   }
 
-  initPhysicsWord() {
+  initPhysicsWord() {  
     this.physicsWorld = new World();
     this.physicsWorld.gravity.set(0, -9.81, 0);
     this.physicsWorld.broadphase = new SAPBroadphase(this.physicsWorld);
@@ -72,14 +83,18 @@ export class SktechWorld {
     this.cannonDebugger = CannonDebugger(this.scene, this.physicsWorld)
   }
 
-  render(world: SktechWorld) {
+  render() {
+		this.requestDelta = this.clock.getDelta();
 
-    requestAnimationFrame(() => world.render(world));
-    this.physicsWorld.step(1 / 60);//更新物理计算
+    let unscaledTimeStep = (this.requestDelta) ;
+		let timeStep = unscaledTimeStep * 1;
+		timeStep = Math.min(timeStep, 1 / 30 );  
+
+    this.physicsWorld.step(1 / 60 , timeStep);//更新物理计算
     this.physicsWorld.fixedStep()
     this.cannonDebugger.update()
+    this.update(0)
     this.renderer.render(this.scene, this.camera);
-  
   }
 
 
@@ -110,10 +125,6 @@ export class SktechWorld {
     }
   }
 
-  public registerUpdatable(registree: any): void {
-    this.updatables.push(registree);
-    this.updatables.sort((a: any, b: any) => (a.updateOrder > b.updateOrder) ? 1 : -1);
-  }
 
   cannonVector(vec: THREE.Vector3): Vec3
     {
@@ -177,13 +188,47 @@ export class SktechWorld {
       (error) => {
         console.error(error);
       });
+  }
 
 
+  loadGround(){
+    const groundShape = new Plane();
+    groundShape.collisionFilterMask = 1
+    const groundBody = new Body({ mass: 0, shape: groundShape }); // 静态刚体，质量为0
+    groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);//旋转规律类似threejs 平面
+    this.physicsWorld.addBody(groundBody);
+  }
 
 
+  loadMan(){
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load('assets/sketch/boxman.glb',
+      (gltf) => {
+			  this.player = new Character(gltf);
+        
+        this.add(this.player);
+      },
+      (xhr) => {
+
+      },
+      (error) => {
+        console.error(error);
+      });
 
   }
 
+
+  public add(worldEntity:any): void
+	{
+		worldEntity.addToWorld(this);
+	}
+
+
+
+  update(delta: number){
+    // console.log(delta);
+    this.player &&  this.player.update()
+  }
   
 
 

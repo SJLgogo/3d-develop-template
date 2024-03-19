@@ -5,6 +5,6 @@ export default [
     { name: 'man-walk-animation', type: LoaderType.FBX, path: 'assets/animation/man/walking.fbx' },
     { name: 'scene_background', type: LoaderType.HDR, path: 'assets/hdr/1.hdr' },
     { name: 'model-car', type: LoaderType.GLTF, path: 'assets/models/car.glb'},
-    { name: 'station', type: LoaderType.GLTF, path: 'assets/glb/osp3.glb' },
+    { name: 'station', type: LoaderType.FBX, path: 'assets/sketch/HZDD.fbx' },
     { name: 'metro', type: LoaderType.GLTF, path: 'assets/glb/metro.glb' },
 ]

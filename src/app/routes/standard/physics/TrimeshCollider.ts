@@ -23,26 +23,29 @@ export class TrimeshCollider
 			mass: 0,
 			position: mesh.position,
 			rotation: mesh.quaternion,
-			friction: 0.3
+			friction: 0
 		};
 		this.options = defaults;
-		const options = this.options 
+		
 
 		let result:any= threeToCannon(this.mesh, {type: ShapeType.MESH});
-		// shape['material'] = mat;
 
 		if (result && result.shape) {
-			let physBox = new CANNON.Body({
-				mass: options.mass,
-				position: options.position,
-				quaternion: options.rotation,
+			// result.shape.collisionFilterMask = 2;
+			let physBox:any = new CANNON.Body({
+				mass: this.options.mass,
+				position: this.options.position,
+				quaternion: this.options.rotation,
 			});
+			physBox.name = mesh.name
 			physBox.addShape(result.shape);
 		
 			// 如果返回结果中包含偏移量，确保也应用这个偏移量
 			if (result.offset) {
 				result.shape.position.copy(result.offset);
 			}
+
+			// console.log(physBox);
 		
 			this.body = physBox;
 		}

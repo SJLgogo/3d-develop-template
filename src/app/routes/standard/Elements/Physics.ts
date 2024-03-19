@@ -19,14 +19,16 @@ export default class Physics {
     world: World;
     declare materials: Materials;
 
+    declare userMaterials:Materials;
+
 
     constructor() {
         this.world = this.createWorld();
         this.materials = this.createMaterials();
+        this.userMaterials = this.createUserMaterials();
         this.setGround()
-
-   
     }
+
 
     private createWorld() {
         const world = new World()
@@ -54,6 +56,21 @@ export default class Physics {
 
         return materials
     }
+
+    private createUserMaterials(){
+        const materials = {
+            default: new Material('user')
+        }
+        const contactMaterial = new ContactMaterial(materials.default,
+            materials.default, {
+            friction: 0.1,
+            restitution: 0.3
+        });
+        this.world.addContactMaterial(contactMaterial)
+
+        return materials
+    }
+
 
     private setGround() {
         const ground = new Body({

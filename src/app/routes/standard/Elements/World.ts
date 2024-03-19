@@ -78,7 +78,7 @@ export default class World {
 
     declare cannonDebugger: any;
 
-    declare customCube: CustomCube;
+    declare customCube: CustomCube[];
 
     declare batchCrowd: BatchCrowd;
 
@@ -143,7 +143,9 @@ export default class World {
 
         this.light = new Light(this.scene)
 
-        this.customCube = new CustomCube(this.physics)
+        this.customCube = [new CustomCube(this.physics) , new CustomCube(this.physics)  ]
+
+
 
         this.station = new Station(this.physics)
 
@@ -212,7 +214,7 @@ export default class World {
     private render() {
         this.physics.world.step(1 / 60);//更新物理计算
         this.physics.world.fixedStep()
-        this.cannonDebugger.update()
+        // this.cannonDebugger.update()
         
         const deltaTime: number = this.clock.getDelta();
 
@@ -231,7 +233,8 @@ export default class World {
 
             this.users.isReady && this.users.update()
 
-            this.customCube.update()
+            // this.customCube.update()
+            this.customCube.forEach((i:any)=>i.update())
         }
 
         this.composer.selectedObjects.length ? this.composer.update() : this.renderer.render(this.scene, this.camera.main)
@@ -285,16 +288,16 @@ export default class World {
         // this.scene.add(this.downMetro.model)
 
         // 站台
-        // this.station.build(resources['station'].scene)
-        // this.scene.add(this.station.main)
+        this.station.build(resources['station'])
+        this.scene.add(this.station.main)
 
         // 人员数据
-        // this.users.build({
-        //     resources: this.resources
-        // })
-        // this.scene.add(this.users.main)
+        this.users.build({
+            resources: this.resources
+        })
+        this.scene.add(this.users.main)
 
-        // this.users.addUser({userId:'1' , coordinate:[0,0,10]})
+        this.users.addUser({userId:'1' , coordinate:[0,200,10]})
 
 
         // // 车辆
@@ -307,71 +310,27 @@ export default class World {
         // this.scene.add(this.shaderDemo.model)
 
         
-        new FBXLoader().load("assets/sketch/HZDD.fbx" , (e)=>{
-            e.traverse((child:any) => {
-      
-              if(child.name.includes('_Gate') || child.name=='立方体004'|| child.name=='立方体005' || child.name=='立方体003' || child.name.includes('elevator') || child.name.includes('stair') || child.name.includes('Fence')  || child.name.includes('obstacle')){
-                let phys = new TrimeshCollider(child, {});
-                phys.body && this.physics.world.addBody(phys.body);
-              }
-
-              if(child.name=='ground'|| child.name.includes('equipment') ){
-                let phys = new BoxCollider({size: new THREE.Vector3(child.scale.x, child.scale.y, child.scale.z)});
-                        phys.body.position.copy(this.cannonVector(child.position));
-                        phys.body.quaternion.copy(this.cannonQuat(child.quaternion));
-                        if( phys.body.hasOwnProperty('computeAABB')){
-                          phys.body.computeAABB()
-                        }
-        
-                        phys.body.shapes.forEach((shape:any) => {
-                          shape.collisionFilterMask = ~CollisionGroups.TrimeshColliders;
-                        });
-        
-                        this.physics.world.addBody(phys.body);
-              }
-      
-              if (child.hasOwnProperty('userData'))
-              {
-                if (child.userData.hasOwnProperty('data'))
-                console.log(child , child.userData);
-                {
-                  if (child.userData.data === 'physics')
-                  {
-                    if (child.userData.hasOwnProperty('type')) 
-                    {
-                      if (child.userData.type === 'box')
-                      {
-                        let phys = new BoxCollider({size: new THREE.Vector3(child.scale.x, child.scale.y, child.scale.z)});
-                        phys.body.position.copy(this.cannonVector(child.position));
-                        phys.body.quaternion.copy(this.cannonQuat(child.quaternion));
-                        if( phys.body.hasOwnProperty('computeAABB')){
-                          phys.body.computeAABB()
-                        }
-        
-                        phys.body.shapes.forEach((shape:any) => {
-                          shape.collisionFilterMask = ~CollisionGroups.TrimeshColliders;
-                        });
-        
-                        this.physics.world.addBody(phys.body);
-                      }
-                      else if (child.userData.type === 'trimesh')
-                      {
-                        let phys = new TrimeshCollider(child, {});
-                        phys.body && this.physics.world.addBody(phys.body);
-                      }
-        
-                      child.visible = false;
-                    }
-                  }
-                }
-              }
-            });
-            this.scene.add(e)
-          })  
+        // new FBXLoader().load("assets/sketch/HZDD.fbx" , (e)=>{
+       
+        //     this.scene.add(e)
+        //   })  
       
         // 自定义Cube
-        // this.customCube.build()
-        // this.scene.add(this.customCube.model)
+        this.customCube[0].build({
+            position:[680, 1500 , -366],
+            movePath:[
+                {x: 976.5903624549146 , z:-71},
+                {x: 1500.5903624549146 , z:-71},
+                {x:3000, z:-366},
+                {x:3300, z:-366},
+            ]
+        })
+        this.scene.add(this.customCube[0].model)
+
+        this.customCube[1].build({
+            position:[3000, 1500 , -366],
+        })
+        this.scene.add(this.customCube[1].model)
 
         this.isReady = true
 
@@ -380,16 +339,6 @@ export default class World {
         })
     }
 
-    cannonVector(vec: THREE.Vector3): Vec3
-    {
-      return new Vec3(vec.x, vec.y, vec.z);
-    }
-
-
-    cannonQuat(quat: THREE.Quaternion): Quaternion
-    {
-        return new Quaternion(quat.x, quat.y, quat.z, quat.w);
-    }
 
     initClick(): void {
         this.raycaster = new Raycaster();

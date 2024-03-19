@@ -9,7 +9,7 @@ export class CapsuleCollider
 	public body: Body;
 	// public visual: THREE.Mesh;
 
-	constructor(options: any)
+	constructor(options: any , physics:any)
 	{
 		let defaults = {
 			mass: 0,
@@ -20,22 +20,26 @@ export class CapsuleCollider
 			friction: 0.3
 		};
 		options =  lodash.defaults({},lodash.clone(options),defaults)
-		console.log(options);
 		this.options = options;
 
 
 		let capsuleBody = new Body({
 			mass: options.mass,
-			position: options.position
+			position: options.position,
+			material: physics.materials.default
 		});
 
 		// Compound shape
 		let sphereShape = new Sphere(options.radius);
+		sphereShape.material = physics.materials.default;
 
 
-		capsuleBody.addShape(sphereShape, new Vec3(0, 0, 0));
+		capsuleBody.addShape(sphereShape, new Vec3(0, 30, 0));
 		capsuleBody.addShape(sphereShape, new Vec3(0, options.height / 2, 0));
-		capsuleBody.addShape(sphereShape, new Vec3(0, -options.height / 2, 0));
+		capsuleBody.addShape(sphereShape, new Vec3(0, options.height - 30, 0));
+		// capsuleBody.addShape(sphereShape, new Vec3(0, -options.height / 2, 0));
+
+		console.log(capsuleBody);
 
 		this.body = capsuleBody;
 	}

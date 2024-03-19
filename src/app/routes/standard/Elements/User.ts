@@ -61,7 +61,7 @@ export default class User {
         this.model = SkeletonUtils.clone(model)
         this.model.name = this.userId
         this.model.position.set(...this.coordinate)
-        this.editmodelSize()
+        // this.editmodelSize()
         this.mixer = new AnimationMixer(this.model);
         this.gltfAnimation()
         this.createBody()
@@ -88,9 +88,9 @@ export default class User {
         try {
             this.mixer.update(deltaTime);
             if (this.characterCapsule) {
-                // const {x,y,z}=this.characterCapsule.body.position
-                // this.model.position.copy(new Vec3(x, 0 ,z))
-                // this.model.quaternion.copy(this.characterCapsule.body.quaternion);
+                const {x,y,z}=this.characterCapsule.body.position
+                this.model.position.copy(new Vec3(x, y ,z))
+                this.model.quaternion.copy(this.characterCapsule.body.quaternion);
             }
         } catch (error) {
             console.log(error);
@@ -100,18 +100,19 @@ export default class User {
     /** 创建胶体模型 */
     createBody(){
         this.characterCapsule = new CapsuleCollider({
-			mass: 1,
-			position: new Vec3(10,1,0),
-			height: 1,
-			radius: 0.2,
+			mass:1,
+			position: new Vec3(780, 1500 , -366),
+			height: 180,
+			radius: 30,
 			segments: 2,
-			friction: 0.0
-		});
+			friction: 0.2
+		},this.physics);
 
         this.characterCapsule.body.allowSleep = false;
-		this.characterCapsule.body.collisionFilterGroup = 2;
+		// this.characterCapsule.body.collisionFilterGroup = 2;
 		this.characterCapsule.body.fixedRotation = true;
 		this.characterCapsule.body.updateMassProperties();
+        
 
 
         this.physics.world.addBody(this.characterCapsule.body);
