@@ -1,4 +1,4 @@
-import { Mesh, PlaneGeometry, ShaderMaterial, Vector2 } from "three";
+import { Mesh, PlaneGeometry, ShaderMaterial, TextureLoader, Vector2 } from "three";
 import createShielMaterial from '../materials/createShieldMaterial'
 export class ShaderDemo {
 
@@ -12,10 +12,15 @@ export class ShaderDemo {
         iTime:{value:0.},
     }
 
+    imgUniforms = {
+        iResolution: { value: new Vector2(window.innerWidth, window.innerHeight) },
+        iChannel0:{ value:new TextureLoader().load('assets/images.bei.jpg')  }
+    }
+
 
     build() {
         const geometry = new PlaneGeometry(100, 100);
-        this.model = new Mesh(geometry, this.shaderMaterial3());
+        this.model = new Mesh(geometry, this.shaderMaterial4());
         this.model.rotation.x = -Math.PI / 2;   
             // const animate=()=> {
         //     requestAnimationFrame(()=>animate());
@@ -203,6 +208,35 @@ export class ShaderDemo {
             uniforms: this.uniforms
         }); 
     }
+
+
+    // 图片
+    shaderMaterial4(){
+        console.log(this.imgUniforms);
+        
+        const vertexShader = `
+        void main() {
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+        `;
+        const fragmentShader = `
+
+        uniform sampler2D iChannel0;
+        uniform vec2 iResolution;
+
+        void main() {
+            vec2 uv = vec2( gl_FragCoord.x/iResolution.x , gl_FragCoord.y/iResolution.y );
+            vec3 tex = texture2D( iChannel0, uv ).xyz;
+            gl_FragColor = vec4( tex, 1.0 );
+        }
+        `
+        return new ShaderMaterial({
+            vertexShader: vertexShader,
+            fragmentShader: fragmentShader,
+            uniforms:this.imgUniforms
+        })
+    }
+
 
 
 

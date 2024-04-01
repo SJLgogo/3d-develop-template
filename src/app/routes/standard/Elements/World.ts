@@ -24,7 +24,6 @@ import Car from "./Car";
 import { ShaderDemo } from "./ShaderDemo";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { BoxCollider } from "../physics/BoxCollider";
-import { CollisionGroups } from "../../sketch/world/CollisionGroups";
 import { TrimeshCollider } from "../physics/TrimeshCollider";
 
 interface Config {
@@ -289,15 +288,15 @@ export default class World {
 
         // 站台
         this.station.build(resources['station'])
-        this.scene.add(this.station.main)
+        // this.scene.add(this.station.main)
 
         // 人员数据
-        this.users.build({
-            resources: this.resources
-        })
-        this.scene.add(this.users.main)
+        // this.users.build({
+        //     resources: this.resources
+        // })
+        // this.scene.add(this.users.main)
 
-        this.users.addUser({userId:'1' , coordinate:[0,200,10]})
+        // this.users.addUser({userId:'1' , coordinate:[0,200,10]})
 
 
         // // 车辆
@@ -306,31 +305,21 @@ export default class World {
         // this.scene.add(this.car.main)
 
         // // Shader
-        // this.shaderDemo.build()
-        // this.scene.add(this.shaderDemo.model)
+        this.shaderDemo.build()
+        this.scene.add(this.shaderDemo.model)
 
-        
-        // new FBXLoader().load("assets/sketch/HZDD.fbx" , (e)=>{
-       
-        //     this.scene.add(e)
-        //   })  
       
         // 自定义Cube
-        this.customCube[0].build({
-            position:[680, 1500 , -366],
-            movePath:[
-                {x: 976.5903624549146 , z:-71},
-                {x: 1500.5903624549146 , z:-71},
-                {x:3000, z:-366},
-                {x:3300, z:-366},
-            ]
-        })
-        this.scene.add(this.customCube[0].model)
-
-        this.customCube[1].build({
-            position:[3000, 1500 , -366],
-        })
-        this.scene.add(this.customCube[1].model)
+        // this.customCube[0].build({
+        //     position:[680, 1500 , -366],
+        //     movePath:[
+        //         {x: 976.5903624549146 , z:-71},
+        //         {x: 1500.5903624549146 , z:-71},
+        //         {x:3000, z:-366},
+        //         {x:3300, z:-366},
+        //     ]
+        // })
+        // this.scene.add(this.customCube[0].model)
 
         this.isReady = true
 

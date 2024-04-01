@@ -7,8 +7,8 @@ const viewPosition = {
 
 
 enum viewScalar {
-    Loading = 6000,
-    Ready = 3000,
+    Loading = 300,
+    Ready = 50,
 }
 
 export default class Camera {

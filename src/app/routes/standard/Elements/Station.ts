@@ -2,7 +2,6 @@ import { Body, Quaternion, Vec3 } from "cannon-es";
 import Physics from "./Physics";
 import { threeToCannon, ShapeType } from 'three-to-cannon';
 import * as THREE from "three";
-import { CollisionGroups } from "../../sketch/world/CollisionGroups";
 import { BoxCollider } from "../physics/BoxCollider";
 import { TrimeshCollider } from "../physics/TrimeshCollider";
 
@@ -40,10 +39,6 @@ export default class Station {
                       if( phys.body.hasOwnProperty('computeAABB')){
                         phys.body.computeAABB()
                       }
-      
-                      phys.body.shapes.forEach((shape:any) => {
-                        shape.collisionFilterMask = ~CollisionGroups.TrimeshColliders;
-                      });
       
                       this.physics.world.addBody(phys.body);
             }
