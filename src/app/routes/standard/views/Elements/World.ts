@@ -1,31 +1,26 @@
 import { AxesHelper, Box3, Clock, Raycaster, Scene, Vector2, Vector3, WebGLRenderer, sRGBEncoding } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Camera from "./Camera";
+
+import { Pathfinding , PathfindingHelper } from 'three-pathfinding'
+import Controls from "../../Elements/Controls";
+import CannonDebugger from "cannon-es-debugger";
 import * as THREE from "three";
-import Physics from "./Physics";
-import CannonDebugger from 'cannon-es-debugger'
-import User from "./User";
-import { Body, BodyType, Quaternion, ShapeType, Vec3 } from "cannon-es";
-import Light from "./Light";
-import { gsap } from 'gsap'
-import CustomCube from "./CustomCube";
-import Composer from "./Composer";
-import ThreeStats from "./Stats";
-import Text from "./Text";
-import { CSS3DRenderer, CSS3DObject, CSS3DSprite } from 'three/examples/jsm/renderers/CSS3DRenderer';
-import Controls from "./Controls";
-import Metro from "./Metro";
-import BatchCrowd from "./BatchCrowd";
-import Heatmap from "./Heatmap";
-import { MqttUserParams, Users } from './Users'
-import FlowLight from "./FlowLight";
-import Station from "./Station";
-import Car from "./Car";
-import { ShaderDemo } from "./ShaderDemo";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
-import { BoxCollider } from "../physics/BoxCollider";
-import { TrimeshCollider } from "../physics/TrimeshCollider";
-import { Pathfinding } from 'three-pathfinding'
+import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer";
+import BatchCrowd from "../../Elements/BatchCrowd";
+import Car from "../../Elements/Car";
+import Composer from "../../Elements/Composer";
+import CustomCube from "../../Elements/CustomCube";
+import FlowLight from "../../Elements/FlowLight";
+import Metro from "../../Elements/Metro";
+import Physics from "../../Elements/Physics";
+import { ShaderDemo } from "../../Elements/ShaderDemo";
+import Station from "../../Elements/Station";
+import ThreeStats from "../../Elements/Stats";
+import { Users, MqttUserParams } from "../../Elements/Users";
+import Heatmap from "../../Elements/Heatmap";
+import Camera from "../../Elements/Camera";
+import Light from "../../Elements/Light";
+import Text from "../../Elements/Text";
 
 interface Config {
     canvas: HTMLCanvasElement,
@@ -110,6 +105,14 @@ export default class World {
     pathfinder = new Pathfinding();
 
     groupID:any;
+
+	helper = new PathfindingHelper();
+
+    playerPosition = new THREE.Vector3( -3.6589823592660586,  5.8022780418396, -8.179382870143233);
+    // playerPosition = new THREE.Vector3(-3.5, 0.5, 5.5 );
+
+    
+
 
     controlsStart = (e: any) => {
 
@@ -259,69 +262,10 @@ export default class World {
 
         this.resources = resources
 
-        // 3d文本
-        // this.text.build(`
-        //     <h1>3D</h1>
-        // `)
-        // this.scene.add(this.text.cSS3DObject)
 
-     
+        // this.operateLevelNav(resources['levelNav'])
 
-        // 区域拥挤
-        // this.crowd.build(resources)
-        // this.scene.add(this.crowd.model)
-
-        // 模型背景
-        // this.scene.background = resources['scene_background'];
-        // this.scene.environment = resources['scene_background'];
-
-
-        // 流光
-        // this.flowLight.build()
-        // this.scene.add(this.flowLight.main)
-
-
-        // 上行地铁
-        // this.upMetro.build(resources['metro'].scene)
-        // this.upMetro.createTween(new Vector3(0, 0, 0))
-        // this.scene.add(this.upMetro.model)
-
-
-        // 下行地铁
-        // this.downMetro.build(resources['metro'].scene)
-        // this.downMetro.createTween(new Vector3(0, 0, 13))
-        // this.scene.add(this.downMetro.model)
-
-        // 站台
-        this.station.build(resources['station'])
-        // this.scene.add(this.station.main)
-
-        // 人员数据
-        // this.users.build({
-        //     resources: this.resources
-        // })
-        // this.scene.add(this.users.main)
-
-        // this.users.addUser({userId:'1' , coordinate:[0,200,10]})
-
-
-        // // 车辆
-        // this.car.build(resources['model-car'].scene)
-        // this.car.setControls()
-        // this.scene.add(this.car.main)
-
-        // // Shader
-        // this.shaderDemo.build()
-        // this.scene.add(this.shaderDemo.model)
-
-
-        if(this.config?.routeForm=='pathFind'){
-
-            this.operateLevelNav(resources['levelNav'])
-
-            // this.scene.add(resources['levelNav'].scene)
-        }
-
+        this.operateDemo(resources['demo'])
 
         this.isReady = true
 
@@ -334,26 +278,60 @@ export default class World {
     operateLevelNav(gltf:any){
         console.log('nav',gltf);
         const ZONE = 'level';
-		const playerPosition = new THREE.Vector3( -3.5, 0.5, 5.5 );
-        
 
+        
         const _navmesh = gltf.scene.getObjectByName("Navmesh_Mesh");
 
         const zone = Pathfinding.createZone(_navmesh.geometry);
 
         this.pathfinder.setZoneData( ZONE, zone );
 
-        console.log(_navmesh);
-        
         const navWireframe = new THREE.Mesh(_navmesh.geometry, new THREE.MeshBasicMaterial({
             color: 0x808080,
             wireframe: true
         }));
         this.scene.add(navWireframe);
 
-        this.groupID = this.pathfinder.getGroup( ZONE, playerPosition );
+        this.groupID = this.pathfinder.getGroup( ZONE, this.playerPosition );
         
         console.log(this.groupID);
+        
+		this.helper
+            .setPlayerPosition( new THREE.Vector3( -3.5, 0.5, 5.5 ) )
+            .setTargetPosition( new THREE.Vector3( -3.5, 0.5, 5.5 ) );
+
+            this.scene.add(this.helper)
+    }
+
+
+    operateDemo(gltf:any){
+
+        const ZONE = 'level';
+
+        console.log(gltf.scene);
+        
+
+        const _navmesh = gltf.scene.getObjectByName("平面");
+
+        const zone = Pathfinding.createZone(_navmesh.geometry);
+
+        this.pathfinder.setZoneData( ZONE, zone );
+
+        const navWireframe = new THREE.Mesh(_navmesh.geometry, new THREE.MeshBasicMaterial({
+            color: 0x808080,
+            wireframe: true
+        }));
+        this.scene.add(navWireframe);
+
+        this.groupID = this.pathfinder.getGroup( ZONE, this.playerPosition );
+        
+        console.log(this.groupID);
+        
+		this.helper
+        .setPlayerPosition( new THREE.Vector3( -3.6589823592660586,  5.8022780418396, -8.179382870143233) )
+        // .setTargetPosition( new THREE.Vector3(-3.6589823592660586,  5.8022780418396, -8.179382870143233) );
+
+        this.scene.add(this.helper)
     }
 
 
@@ -396,6 +374,33 @@ export default class World {
                 console.log('点击位置的三维坐标:', intersectionPoint);
                 console.log(clickedObject.name, clickedObject);
                 clickedObject?.dispatchEvent({ type: 'click' });
+
+                this.helper
+				.reset()
+				.setPlayerPosition( this.playerPosition );
+
+                const targetPosition = intersectionPoint
+                this.helper.setTargetPosition( targetPosition );
+
+                const path = this.pathfinder.findPath( this.playerPosition, targetPosition, 'level', this.groupID );
+                
+                console.log(path);
+
+                if ( path && path.length ) {
+
+                    this.helper.setPath( path );
+    
+                }else{
+                    
+                    const closestPlayerNode = this.pathfinder.getClosestNode( this.playerPosition, 'level', this.groupID );
+                    const clamped = new THREE.Vector3();
+
+                    this.pathfinder.clampStep(
+                        this.playerPosition, targetPosition.clone(), closestPlayerNode, 'level', this.groupID , clamped );
+
+                    this.helper.setStepPosition( clamped );
+                }
+
             }
         }, 250)
     }
