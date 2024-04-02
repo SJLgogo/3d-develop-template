@@ -184,7 +184,7 @@ export default class World {
 
 
     private init() {
-        this.AxesHelper(200)
+        // this.AxesHelper(200)
         this.initClick()
     }
 

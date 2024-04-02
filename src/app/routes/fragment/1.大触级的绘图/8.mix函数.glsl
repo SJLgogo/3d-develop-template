@@ -1,4 +1,4 @@
-#define mix(x,y,t) x*(1.-t)+y*t
+#define mix(x,y,t) x*(1.-t)+y*t  // 混合函数
 
 float sdCircle(vec2 p,float r)
 {
