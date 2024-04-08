@@ -8,5 +8,5 @@ export default [
     { name: 'station', type: LoaderType.FBX, path: 'assets/sketch/HZDD.fbx' },
     { name: 'metro', type: LoaderType.GLTF, path: 'assets/glb/metro.glb' },
     { name: 'levelNav', type: LoaderType.GLTF, path: 'assets/glb/level.nav.glb' },
-    { name: 'demo', type: LoaderType.GLTF, path: 'assets/glb/demo.glb' },
+    { name: 'demo', type: LoaderType.GLTF, path: 'assets/glb/demo2.glb' },
 ]

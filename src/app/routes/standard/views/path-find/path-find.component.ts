@@ -34,8 +34,6 @@ export class PathFindComponent implements OnInit {
   ngOnInit(): void {
     this.init()
     tapable._hooks.userHook.tap('人员分布', (params: MqttUserParams) => this.receiveUser(params))
-
-
     setTimeout(() => {
       tapable._hooks.userHook.call({ userId: '1', coordinate: [20, 0, -2] },)
     }, 1000)

@@ -116,14 +116,6 @@ export class AssetManager extends Component{
         this.totalSuccess++
         this.resources[resource.name] = res
 
-        if (resource.name == 'man-walk-animation') {
-            this.resources[resource.name] = res.animations[0]
-        }
-
-        if (resource.name == 'man') {
-            this.resources['man-stand-animation'] = res.animations[0]
-        }
-
         this.fileLoaded && this.fileLoaded()
 
         if (this.total === this.totalSuccess + this.totalFail) {

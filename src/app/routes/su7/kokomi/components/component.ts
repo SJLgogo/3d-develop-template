@@ -11,14 +11,16 @@ class Component{
     constructor(base:Base){
         this.base = base;
         this.container = this.base.scene;
+        
         this.base.update((time: number) => this.update(time));
 
         this.emitter = mitt();
     }
 
     update(time: number) {
-        1 + 1;
+        1+1
     }
+
     // 监听事件
     on(type: string, handler: any) {
         this.emitter.on(type, handler);

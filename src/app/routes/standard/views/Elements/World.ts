@@ -108,7 +108,7 @@ export default class World {
 
 	helper = new PathfindingHelper();
 
-    playerPosition = new THREE.Vector3( -3.6589823592660586,  5.8022780418396, -8.179382870143233);
+    playerPosition = new THREE.Vector3(  2.9536120035083036,  0.14857101440429688,-0.29599850614137946);
     // playerPosition = new THREE.Vector3(-3.5, 0.5, 5.5 );
 
     
@@ -310,8 +310,7 @@ export default class World {
 
         console.log(gltf.scene);
         
-
-        const _navmesh = gltf.scene.getObjectByName("平面");
+        const _navmesh = gltf.scene.getObjectByName("平面001");
 
         const zone = Pathfinding.createZone(_navmesh.geometry);
 
@@ -328,7 +327,7 @@ export default class World {
         console.log(this.groupID);
         
 		this.helper
-        .setPlayerPosition( new THREE.Vector3( -3.6589823592660586,  5.8022780418396, -8.179382870143233) )
+        .setPlayerPosition( new THREE.Vector3(  2.9536120035083036,  0.14857101440429688,-0.29599850614137946) )
         // .setTargetPosition( new THREE.Vector3(-3.6589823592660586,  5.8022780418396, -8.179382870143233) );
 
         this.scene.add(this.helper)

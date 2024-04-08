@@ -16,7 +16,14 @@ export class CameraControls extends Component{
             base.camera ,
             base.renderer.domElement
         )
+
         this.controls = controls;
     }
+
+
+    update(time:number){
+        this.controls.update(this.base.clock.deltaTime)
+    }
+
 
 }

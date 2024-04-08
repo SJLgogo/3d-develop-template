@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { InteractionManager } from "three.interactive";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Animator } from "../components/animator";
+import { Clock } from "../components/Clock";
 
 class Base{
 
@@ -18,6 +19,8 @@ class Base{
     animator:Animator;
 
     interactionManager: InteractionManager;
+
+    clock:Clock;
 
 
     constructor(sel = "#sketch"){
@@ -58,6 +61,10 @@ class Base{
 
         this.composer = null;
 
+        const clock = new Clock(this);
+        this.clock = clock;
+    
+
         this.AxesHelper(200)
 
         this.init();
@@ -70,7 +77,7 @@ class Base{
     }
 
     update(fn:any){
-
+        this.animator.add(fn)
     }
 
     init(){

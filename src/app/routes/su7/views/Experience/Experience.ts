@@ -21,7 +21,8 @@ export default class Experience extends Base{
             y: 0.8,
             z: -11,
           },
-      cameraFov: 33.4,
+      cameraFov: 33.4,  
+      isCameraMoving:false , // 相机是否移动
     }
 
     
@@ -43,10 +44,24 @@ export default class Experience extends Base{
         const lookAt = new THREE.Vector3(0, 0.8, 0);
         camera.lookAt(lookAt);
 
-        // this.useCameraControls()
-        this.useOrbitControls()
+        this.useCameraControls()
+        // this.useOrbitControls()
 
         this.world = new World(this);
+
+
+        this.update(()=>{
+            if(this.params.isCameraMoving){
+                this.cameraControls.controls.enabled = false;
+                this.cameraControls.controls.setPosition(
+                    this.params.cameraPos.x,
+                    this.params.cameraPos.y,
+                    this.params.cameraPos.z
+                  );
+            }else{
+                this.cameraControls.controls.enabled = true;
+            }
+        })
 
     }
 
