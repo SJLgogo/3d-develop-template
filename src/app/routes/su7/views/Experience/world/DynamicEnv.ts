@@ -5,6 +5,8 @@ import Experience from "../Experience";
 import dynamicEnvVertexShader from "../Shaders/DynamicEnv/vert.glsl";
 import dynamicEnvFragmentShader from "../Shaders/DynamicEnv/frag.glsl";
 import { FullScreenQuad } from "../../../kokomi/three-stdlib/postprocessing/pass";
+import { HttpClient } from "@angular/common/http";
+
 
 export class DynamicEnv extends Component{
 
@@ -14,14 +16,12 @@ export class DynamicEnv extends Component{
 
     material:THREE.ShaderMaterial;
     
-    constructor(base:Experience , config:any={}){
+    constructor(base:Experience , config:any={} ){
         super(base)
 
         const {envmap1 , envmap2} = config
 
-        console.log(envmap1);
-
-        const envData = envmap1 cx c-?.source.data;
+        const envData = envmap1?.source.data;
 
         const fbo = new FBO(this.base , {
             width:envData.width,
@@ -30,7 +30,7 @@ export class DynamicEnv extends Component{
         this.fbo = fbo
 
         this.envmap.mapping = THREE.CubeUVReflectionMapping;
-        
+
         const material = new THREE.ShaderMaterial({
             vertexShader:`
             uniform float iTime;

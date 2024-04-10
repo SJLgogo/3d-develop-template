@@ -24,7 +24,7 @@ export default class World extends Component {
         base.am.on('ready',()=>{
             this.handleAssets()
 
-            // this.base.scene.background = new THREE.Color("black");
+            this.base.scene.background = new THREE.Color("black");
 
             // this.setSceneHdr()
 
@@ -47,7 +47,6 @@ export default class World extends Component {
             dynamicEnv.setWeight(1);
 
 
-
             const t1 = gsap.timeline()
             this.t1 = t1
 
@@ -55,7 +54,6 @@ export default class World extends Component {
             const car = new Car(this.base)
             this.car= car
             car.addExisting();
-
 
             this.enter()
         })
@@ -68,8 +66,6 @@ export default class World extends Component {
         this.base.scene.background = texture;
         this.base.scene.environment = texture;
     }
-
-
 
 
 

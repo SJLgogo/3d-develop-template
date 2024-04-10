@@ -32,7 +32,7 @@ export class Car extends Component{
         const body = this.modelParts[2] as THREE.Mesh;
         const bodyMat = body.material as THREE.MeshStandardMaterial;
         this.bodyMat = bodyMat;
-        bodyMat.color = new THREE.Color("#26d6e9");
+        // bodyMat.color = new THREE.Color("#26d6e9");
 
         this.modelParts.forEach((item: any) => {
             if (item.isMesh) {
