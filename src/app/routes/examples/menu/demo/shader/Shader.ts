@@ -1,4 +1,6 @@
+import { LoaderType } from "src/app/routes/standard/utiles/Loader";
 import { Base } from "src/app/routes/su7/kokomi/Base/base";
+import { AssetManager } from "src/app/routes/su7/kokomi/components/assetManager";
 import { Component } from "src/app/routes/su7/kokomi/components/component";
 import { OrbitControls } from "src/app/routes/su7/kokomi/controls/orbitControls";
 import { Box } from "src/app/routes/su7/kokomi/shapes/Box";
@@ -14,6 +16,14 @@ export class Shader extends Base{
         this.scene.background = new THREE.Color('black')
 
         new OrbitControls(this)
+
+        // new AssetManager(this , [
+        //     {
+        //         name: "hdr",
+        //         type: LoaderType.HDR,
+        //         path: "https://kokomi-demo-1259280366.cos.ap-nanjing.myqcloud.com/potsdamer_platz_1k.hdr",
+        //       },
+        // ])
 
         const box = new Box(this)
         this.box=box

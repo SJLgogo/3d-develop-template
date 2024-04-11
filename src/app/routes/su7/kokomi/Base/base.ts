@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import { InteractionManager } from "three.interactive";
-import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { Animator } from "../components/animator";
 import { Clock } from "../components/Clock";
+import { EffectComposer } from "three-stdlib";
 
 class Base{
 
@@ -14,7 +14,7 @@ class Base{
     
     container:HTMLElement;
 
-    composer: EffectComposer | null;
+    composer: EffectComposer | any | null;
 
     animator:Animator;
 
@@ -31,7 +31,7 @@ class Base{
             80,
             window.innerWidth / window.innerHeight,
             0.01,
-            100
+            1000
         )
         camrea.position.z = 1;
         this.camera = camrea
