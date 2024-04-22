@@ -1,7 +1,11 @@
-<ul>
-    <li (click)="view('examples/demo1')">shader</li>
-    <li (click)="view('examples/demo2')">场景美化</li>
-</ul>
-
-
-<router-outlet></router-outlet>
+<main>
+    <ul>
+        <li (click)="view('examples/demo1')">shader</li>
+        <li (click)="view('examples/demo2')">场景美化</li>
+    </ul>
+    
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+    
+</main>

@@ -6,6 +6,7 @@ import { Car } from "./Car";
 import gsap from "gsap";
 import { DynamicEnv } from "./DynamicEnv";
 import { getEnvmapFromHDRTexture } from "../../../kokomi/utils/misc";
+import { StartRoom } from "./StartRoom";
 
 export default class World extends Component {
 
@@ -16,12 +17,19 @@ export default class World extends Component {
     car!:Car;
 
     t1!:any;
+    
+    startRoom!: StartRoom;
 
 
     constructor(base:Experience){
         super(base)     
         
         base.am.on('ready',()=>{
+
+            
+            const t1 = gsap.timeline()
+            this.t1 = t1
+
             this.handleAssets()
 
             this.base.scene.background = new THREE.Color("black");
@@ -47,13 +55,15 @@ export default class World extends Component {
             dynamicEnv.setWeight(1);
 
 
-            const t1 = gsap.timeline()
-            this.t1 = t1
+            const startRoom = new StartRoom(this.base);
+            this.startRoom = startRoom;
+            startRoom.addExisting();
+
 
 
             const car = new Car(this.base)
             this.car= car
-            car.addExisting();
+            // car.addExisting();
 
             this.enter()
         })

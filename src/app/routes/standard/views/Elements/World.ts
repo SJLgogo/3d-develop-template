@@ -381,6 +381,8 @@ export default class World {
                 const targetPosition = intersectionPoint
                 this.helper.setTargetPosition( targetPosition );
 
+                console.log(this.playerPosition, targetPosition);
+
                 const path = this.pathfinder.findPath( this.playerPosition, targetPosition, 'level', this.groupID );
                 
                 console.log(path);

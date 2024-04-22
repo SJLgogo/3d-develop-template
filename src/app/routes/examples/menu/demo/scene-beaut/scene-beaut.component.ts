@@ -31,7 +31,8 @@ class Demo extends Base {
   constructor(ele: string) {
     super(ele)
 
-    new OrbitControls(this);
+    const con = new OrbitControls(this);
+    con.controls.target.set(0,0,0)
 
     this.scene.background = new THREE.Color("#0b0b11");
 
@@ -64,14 +65,15 @@ class Demo extends Base {
 
       const modelParts = flatModel(model);
 
+     
       modelParts.forEach((item: any) => {
         if (item.material) {
           // emissive
-          item.material.toneMapped = false;
-          item.material.emissiveIntensity = 50;
+          item.material.toneMapped = false; // tonemapping给关闭，因为tonemapping会自动把颜色的RGB值限制在0-1内，达不到自发光的要求
+          item.material.emissiveIntensity = 50; //用到了自发光贴图emissive map，而这个贴图的显示效果跟材质的emissiveIntensity参数息息相关，将它调高就会使自发光的效果更加显著
 
           // envmap
-          item.material.envMapIntensity = 0.5;
+          item.material.envMapIntensity = 0.5;  // 设置环境贴图的强度为 0.5
         }
       });
 
@@ -86,22 +88,24 @@ class Demo extends Base {
           new POSTPROCESSING.RenderPass(this.scene, this.camera)
         );
 
+        // 用于实现泛光（Bloom）效果
         const bloom = new POSTPROCESSING.BloomEffect({
           blendFunction: POSTPROCESSING.BlendFunction.ADD,
           mipmapBlur: true,
-          luminanceThreshold: 1,
+          luminanceThreshold: 1, //luminanceThreshold设为了1，这是为了防止场景的其他部分发亮，仅仅让那些有emissive map的材质发亮
         });
 
+        // 用于实现抗锯齿效果
         const smaa = new POSTPROCESSING.SMAAEffect();
         const effectPass = new POSTPROCESSING.EffectPass(
           this.camera,
           bloom,
-          // ssr,
           smaa
         );
         composer.addPass(effectPass);
 
-        this.renderer.autoClear = true;
+        // 设置 renderer 的自动清除：
+        this.renderer.autoClear = true; 
       };
 
       createPostprocessing();
