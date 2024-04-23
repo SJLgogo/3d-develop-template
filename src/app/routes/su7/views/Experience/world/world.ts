@@ -60,7 +60,6 @@ export default class World extends Component {
             startRoom.addExisting();
 
 
-
             const car = new Car(this.base)
             this.car= car
             // car.addExisting();
@@ -103,12 +102,6 @@ export default class World extends Component {
                 this.base.params.isCameraMoving = false
             }
         })
-
-        
-
-
-
-
     }
     
 

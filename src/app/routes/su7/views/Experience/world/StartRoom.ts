@@ -26,15 +26,14 @@ export class StartRoom extends Component{
         lightMat.emissiveIntensity = 1;  // 设置自发光强度
         lightMat.toneMapped = false;    // 禁用色调映射，材质的颜色将直接显示原始的颜色值。
         lightMat.transparent = true;   // 透明
+        this.lightMat.alphaTest = 0.1;
+
         console.log(modelParts);
 
     }
 
 
     addExisting(){
-        console.log(this.base.scene);
-        console.log(this.model);
-        
         
         this.base.scene.add(this.model.scene)
     }

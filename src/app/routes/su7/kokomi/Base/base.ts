@@ -24,9 +24,6 @@ class Base{
 
 
     constructor(sel = "#sketch"){
-
-        
-
         const camrea = new THREE.PerspectiveCamera(
             80,
             window.innerWidth / window.innerHeight,

@@ -15,7 +15,6 @@ class Animator{
         this.tasks.push(fn)
     }
 
-
     update(){
         this.base.renderer.setAnimationLoop((time:number)=>{
             this.tick(time)

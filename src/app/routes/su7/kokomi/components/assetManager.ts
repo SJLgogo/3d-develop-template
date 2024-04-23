@@ -118,6 +118,7 @@ export class AssetManager extends Component{
 
         this.fileLoaded && this.fileLoaded()
 
+
         if (this.total === this.totalSuccess + this.totalFail) {
             this.emit('ready')
             this.loadEnd && this.loadEnd(this.resources)
