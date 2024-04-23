@@ -18,6 +18,9 @@ export class AssetManager extends Component{
     total: number;
     totalSuccess: number = 0
     totalFail: number = 0
+    percentNum: number = 0
+
+
     declare loadEnd: (resources: { [key: string]: any }) => void
     declare fileLoaded: () => void
 
@@ -117,6 +120,8 @@ export class AssetManager extends Component{
         this.resources[resource.name] = res
 
         this.fileLoaded && this.fileLoaded()
+
+        this.percentNum = Math.floor((this.totalSuccess / this.total)*100)
 
 
         if (this.total === this.totalSuccess + this.totalFail) {

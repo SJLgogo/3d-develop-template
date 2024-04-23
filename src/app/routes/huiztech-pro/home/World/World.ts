@@ -10,30 +10,22 @@ export class World extends Component{
 
     station!:Station;
 
-    
-
 
     constructor(base:Huiztech){
         super(base)
-
         this.base.am.on('ready',()=>this.loadFinish())
-
     }
 
-
     loadFinish(){
-
         const station = new Station(this.base)
         station.addExisting()
         this.station = station
 
-        
         this.enter()
-
     }
 
-
     enter(){
+        this.loadingClose()
         this.base.params.isCameraMoving = true
         gsap.to(this.base.params.cameraPos,{
             x:1565.2177489581532,
@@ -43,6 +35,14 @@ export class World extends Component{
             ease: "power2.inOut",
             onComplete:()=>{
                 this.base.params.isCameraMoving = false
+            }
+        })
+    }
+
+
+    loadingClose(){
+        gsap.to('.loading', {
+            opacity: 0, onComplete: () => {
             }
         })
     }

@@ -10,8 +10,11 @@ export class HomeComponent implements OnInit {
 
   constructor() { }
 
+  hui!:Huiztech;
+
   ngOnInit(): void {
-    new Huiztech('#three')
+    const hui = new Huiztech('#three')
+    this.hui = hui
   }
 
 }

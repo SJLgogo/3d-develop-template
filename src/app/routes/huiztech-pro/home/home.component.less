@@ -2,4 +2,29 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: relative;
+
+    
+    .loading {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        font-size: 100px;
+        font-weight: bold;
+
+        .percent {
+            font-size: 120px;
+        }
+
+        .unit {
+            margin-bottom: 10px;
+        }
+    }
   }

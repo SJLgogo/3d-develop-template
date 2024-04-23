@@ -5,10 +5,13 @@ import { AssetManager } from "../../su7/kokomi/components/assetManager";
 import resources from './resource'
 import {World} from "./World/World";
 import {Stats} from '../../su7/kokomi/components/state'
+import { RaycastSelector } from "../../su7/kokomi/components/raycastSelector";
 
 export class Huiztech extends Base{
 
     cameraControls!:CameraControls;
+
+    declare raycastSelector:RaycastSelector;
 
     params={
         cameraPos: {
@@ -51,6 +54,8 @@ export class Huiztech extends Base{
 
         new Stats(this)
 
+        this.initSceneClick()
+
         this.update(()=>{
             if(this.params.isCameraMoving){
                 this.cameraControls.controls.enabled = false; // 禁用相机交互
@@ -68,6 +73,15 @@ export class Huiztech extends Base{
     useCameraController(){
         this.cameraControls = new CameraControls(this)
         this.cameraControls.controls.setTarget(1300, 0, 0);
+    }
+
+
+    initSceneClick(){
+        this.raycastSelector = new RaycastSelector(this)
+
+        this.renderer.domElement.addEventListener('click',(e)=>{
+            this.raycastSelector.getInterSects()
+        })
     }
 
 }
