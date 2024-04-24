@@ -1,38 +1,59 @@
-import { LoaderType } from "src/app/routes/standard/utiles/Loader";
 import { Base } from "src/app/routes/su7/kokomi/Base/base";
 import { AssetManager } from "src/app/routes/su7/kokomi/components/assetManager";
 import { Component } from "src/app/routes/su7/kokomi/components/component";
 import { OrbitControls } from "src/app/routes/su7/kokomi/controls/orbitControls";
 import { Box } from "src/app/routes/su7/kokomi/shapes/Box";
 import * as THREE from "three";
+import fragShader from "./frag.glsl";
 
 export class Shader extends Base{
 
-    box :Box;
+    declare box :Box;
 
     constructor(eleName:string){
         super(eleName)
 
         this.scene.background = new THREE.Color('black')
 
+        const camera = this.camera as THREE.PerspectiveCamera;
+        camera.updateProjectionMatrix();
+        const cameraPos = new THREE.Vector3(
+            10,10,10
+        );
+        camera.position.copy(cameraPos);
+
         new OrbitControls(this)
 
-        // new AssetManager(this , [
-        //     {
-        //         name: "hdr",
-        //         type: LoaderType.HDR,
-        //         path: "https://kokomi-demo-1259280366.cos.ap-nanjing.myqcloud.com/potsdamer_platz_1k.hdr",
-        //       },
-        // ])
+        // const box = new Box(this)
+        // this.box=box
+        // box.addExisting()
+        // this.setShader()
 
-        const box = new Box(this)
-        this.box=box
-        box.addExisting()
-
-        this.setShader()
-
+        this.initCircle()
     }
 
+
+    initCircle(){
+        const geometry = new THREE.SphereGeometry(2,64,64)
+        // const material = new THREE.MeshBasicMaterial({color:'red'})
+
+        const material = new THREE.ShaderMaterial({
+            vertexShader:`
+                void main(){
+                    vec4 modelPosition=modelMatrix*vec4(position,1.);
+                    vec4 viewPosition=viewMatrix*modelPosition;
+                    vec4 projectedPosition=projectionMatrix*viewPosition;
+                    gl_Position=projectedPosition;
+                }
+            `,
+            fragmentShader:fragShader
+        })
+
+
+        const mesh = new THREE.Mesh(geometry, material);
+        this.scene.add(mesh);
+
+    }
 
     
     setShader(){
@@ -73,18 +94,6 @@ export class Shader extends Base{
             }
             `,
             uniforms:{
-                // uEnvmap1:{
-                //     value:envmap1
-                // },
-                // uEnvmap2: {
-                //     value:envmap2,
-                // },
-                // uWeight: {
-                //     value: 0,
-                // },
-                // uIntensity: {
-                //     value: 1,
-                // },
             },
         })
         this.box.mesh.material = material
