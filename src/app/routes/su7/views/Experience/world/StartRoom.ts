@@ -5,7 +5,7 @@ import Experience from "../Experience";
 
 export class StartRoom extends Component{
 
-    base!:Experience;
+    declare base:Experience;
 
     model:any;
 

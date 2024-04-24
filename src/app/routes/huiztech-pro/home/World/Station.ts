@@ -4,7 +4,7 @@ import { flatModel } from "src/app/routes/su7/kokomi/utils/misc";
 
 export class Station extends Component {
 
-    base!:Huiztech;
+    declare base:Huiztech;
 
     model:any;
 
