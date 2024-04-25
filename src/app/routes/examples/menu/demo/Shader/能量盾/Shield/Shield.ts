@@ -7,6 +7,7 @@ import * as THREE from "three";
 import ShieldMaterial from "../Materials/ShieldMaterial";
 import * as dat from 'dat.gui';
 import { getEnvmapFromHDRTexture } from "src/app/routes/su7/kokomi/utils/misc";
+import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";
 
 export default class Shield extends Base{
 
@@ -33,7 +34,7 @@ export default class Shield extends Base{
         ]})
         this.am = am
 
-        new OrbitControls(this)
+        this.useCameraControls()
         
         this.am.on('ready',()=> this._init())
 
@@ -94,6 +95,11 @@ export default class Shield extends Base{
         this.material && (this.material.uniforms.uTime.value = time)
     }
 
+
+    useCameraControls(){
+        const cameraControls = new CameraControls(this)
+        cameraControls.controls.setTarget(0, 0.8, 0);
+    }
 
 
 }

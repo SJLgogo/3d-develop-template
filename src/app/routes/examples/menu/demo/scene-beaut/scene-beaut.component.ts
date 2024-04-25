@@ -7,6 +7,7 @@ import { flatModel, getEnvmapFromHDRTexture } from 'src/app/routes/su7/kokomi/ut
 import * as THREE from 'three';
 import { EffectComposer, RenderPass } from 'three-stdlib';
 import * as POSTPROCESSING from 'postprocessing';
+import { CameraControls } from 'src/app/routes/su7/kokomi/controls/cameraControls';
 
 @Component({
   selector: 'app-scene-beaut',
@@ -31,8 +32,6 @@ class Demo extends Base {
   constructor(ele: string) {
     super(ele)
 
-    const con = new OrbitControls(this);
-    con.controls.target.set(0,0,0)
 
     this.scene.background = new THREE.Color("#0b0b11");
 
@@ -53,6 +52,9 @@ class Demo extends Base {
     })
     this.am = am
 
+
+    this.useCameraControls()
+    
     this.am.on('ready', () => {
 
       const envMap = getEnvmapFromHDRTexture(this.renderer, am.resources["hdr"]);
@@ -118,6 +120,12 @@ class Demo extends Base {
 
 
   }
+
+  
+  useCameraControls(){
+    const cameraControls = new CameraControls(this)
+    cameraControls.controls.setTarget(0, 0, 0);
+}
 
 
 

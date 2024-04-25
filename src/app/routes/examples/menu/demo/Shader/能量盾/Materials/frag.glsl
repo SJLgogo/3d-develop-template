@@ -14,5 +14,5 @@ void main(){
 
     vec4 noiseColor = texture2D(uNoiseTexture , uv);
 
-    gl_FragColor = vec4( noiseColor.rgb * vIntensity * uColor   ,1.0);
+    gl_FragColor = vec4( noiseColor.rgb * vIntensity * uColor ,1.0);
 }
