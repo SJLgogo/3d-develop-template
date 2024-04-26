@@ -15,13 +15,13 @@ export class Clock extends Component{
         const clock = new THREE.Clock()
         this.clock = clock
 
-        this.deltaTime = 0
-        this.elapsedTime = 0
+        this.deltaTime = 0      // 计算于上一个时间点之间的时间
+        this.elapsedTime = 0    // 当前的时间
     }
 
     update(time: number): void {
-        const newElapsedTime = this.clock.getElapsedTime();
-        const deltaTime = newElapsedTime - this.elapsedTime;
+        const newElapsedTime = this.clock.getElapsedTime();  
+        const deltaTime = newElapsedTime - this.elapsedTime;  
         this.deltaTime = deltaTime;
         this.elapsedTime = newElapsedTime;
         this.emit("tick");

@@ -1,19 +1,22 @@
 import { LoaderType } from "src/app/routes/standard/utiles/Loader";
 import { Base } from "src/app/routes/su7/kokomi/Base/base";
 import { AssetManager } from "src/app/routes/su7/kokomi/components/assetManager";
-import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";
-import { OrbitControls } from "src/app/routes/su7/kokomi/controls/orbitControls";
 import * as THREE from "three";
-import { HaloMaterial } from "../Materials/HaloMaterial";
+import { HaloMaterial } from "../../能量光环/Materials/HaloMaterial";
+import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";
+import { SphereMaterial } from "../Material/material";
+import { UniformInjector } from "src/app/routes/su7/kokomi/components/uniformInjector";
 
-export default class Halo extends Base{
-
+export class Particles extends Base{
+    
     am!:AssetManager;
 
     material:any;
 
     constructor(ele:string){
         super(ele)
+        
+        this.scene.background = new THREE.Color('black')
 
         const camera = this.camera
         camera.updateProjectionMatrix();
@@ -30,32 +33,28 @@ export default class Halo extends Base{
         this.useCameraControls()
         
         this.am.on('ready',()=> this._init())
-
     }
 
 
     _init(){
-        this._createLine()
+        this._createCircle()
+    }
+
+
+    _createCircle(){
+        const geometry = new THREE.SphereGeometry(2,32,32)
+        const material:any = new SphereMaterial()
+        const uj = new UniformInjector(this)
+        material.uniforms = {...material.uniforms , ...uj.shaderToyUnidorms}
+        this.material = material
+        const mesh = new THREE.Mesh(geometry,material)
+        this.scene.add(mesh)
 
         this.update((time:any)=>{
-            this.material.uniforms.uTime = time
+            uj.injectShadertoyUniforms(material.uniforms)
         })
     }
 
-    _createLine(){
-        const points = [
-            new THREE.Vector3(-10, 0, 0),
-            new THREE.Vector3(-15, 15, 20),
-            new THREE.Vector3(5, -15, 0),
-            new THREE.Vector3(10, 0, 10)
-        ];
-        const curve = new THREE.CatmullRomCurve3(points);
-        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(50));
-        const curveMaterial:any = new HaloMaterial();
-        this.material = curveMaterial
-        const curveObject = new THREE.Line(curveGeometry, curveMaterial);
-        this.scene.add(curveObject);
-    }
 
     useCameraControls(){
         const cameraControls = new CameraControls(this)
