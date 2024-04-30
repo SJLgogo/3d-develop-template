@@ -4,14 +4,18 @@ import { AssetManager } from "src/app/routes/su7/kokomi/components/assetManager"
 import * as THREE from "three";
 import { HaloMaterial } from "../../能量光环/Materials/HaloMaterial";
 import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";
-import { SphereMaterial } from "../Material/material";
+import { SphereMaterial } from "../Material/vertex/material";
 import { UniformInjector } from "src/app/routes/su7/kokomi/components/uniformInjector";
+import { PointMaterial } from "../Material/point/material";
+import {Stats} from 'src/app/routes/su7/kokomi/components/state'
 
 export class Particles extends Base{
     
     am!:AssetManager;
 
-    material:any;
+    vertexMaterial:any;
+
+    pointMaterial:any;
 
     constructor(ele:string){
         super(ele)
@@ -31,6 +35,8 @@ export class Particles extends Base{
         this.am = am
 
         this.useCameraControls()
+
+        new Stats(this)
         
         this.am.on('ready',()=> this._init())
     }
@@ -38,6 +44,22 @@ export class Particles extends Base{
 
     _init(){
         this._createCircle()
+        this._createPointCircle()
+    }
+
+    _createPointCircle(){
+        const geometry = new THREE.SphereGeometry(2,32,32)
+        const material:any = new PointMaterial()
+        const uj = new UniformInjector(this)
+        material.uniforms = {...material.uniforms , ...uj.shaderToyUnidorms}
+        this.pointMaterial = material
+        const mesh = new THREE.Points(geometry,material)
+        mesh.position.set(5,0,0)
+        this.scene.add(mesh)
+
+        this.update((time:any)=>{
+            uj.injectShadertoyUniforms(material.uniforms)
+        })
     }
 
 
@@ -46,7 +68,7 @@ export class Particles extends Base{
         const material:any = new SphereMaterial()
         const uj = new UniformInjector(this)
         material.uniforms = {...material.uniforms , ...uj.shaderToyUnidorms}
-        this.material = material
+        this.vertexMaterial = material
         const mesh = new THREE.Mesh(geometry,material)
         this.scene.add(mesh)
 
