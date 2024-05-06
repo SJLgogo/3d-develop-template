@@ -3,6 +3,7 @@ import { Huiztech } from "../Huiztech";
 import { Component } from "src/app/routes/su7/kokomi/components/component";
 import { Station } from "./Station";
 import { gsap } from 'gsap'
+import { getEnvmapFromHDRTexture } from "src/app/routes/su7/kokomi/utils/misc";
 
 export class World extends Component{
 
@@ -20,6 +21,14 @@ export class World extends Component{
         const station = new Station(this.base)
         station.addExisting()
         this.station = station
+
+        const envMap = getEnvmapFromHDRTexture(
+            this.base.renderer,
+            this.base.am.resources["hdr"]
+          );
+        this.base.scene.environment = envMap;
+        this.base.scene.background = envMap;
+
 
         this.enter()
     }

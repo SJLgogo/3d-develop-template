@@ -5,6 +5,7 @@ import { SceneBeautComponent } from './menu/demo/scene-beaut/scene-beaut.compone
 import { EnergyShieldComponent } from './menu/demo/Shader/能量盾/energy-shield/energy-shield.component';
 import { EnergyHaloComponent } from './menu/demo/Shader/能量光环/energy-halo/energy-halo.component';
 import { ParticlesComponent } from './menu/demo/Shader/网格粒子/particles/particles.component';
+import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switching.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -12,6 +13,7 @@ const routes: Routes = [
     {path:'demo3', component:EnergyShieldComponent ,data:{title:'能量盾'}},
     {path:'demo4', component:EnergyHaloComponent ,data:{title:'能量光环'}},
     {path:'particles', component:ParticlesComponent ,data:{title:'网格粒子'}},
+    {path:'scene-switching', component:SceneSwitchingComponent ,data:{title:'场景切换'}},
 ];
 
 @NgModule({
