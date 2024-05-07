@@ -6,14 +6,18 @@ import { EnergyShieldComponent } from './menu/demo/Shader/能量盾/energy-shiel
 import { EnergyHaloComponent } from './menu/demo/Shader/能量光环/energy-halo/energy-halo.component';
 import { ParticlesComponent } from './menu/demo/Shader/网格粒子/particles/particles.component';
 import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switching.component';
+import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
     {path:'demo2', component:SceneBeautComponent ,data:{title:'场景美化'}},
     {path:'demo3', component:EnergyShieldComponent ,data:{title:'能量盾'}},
-    {path:'demo4', component:EnergyHaloComponent ,data:{title:'能量光环'}},
     {path:'particles', component:ParticlesComponent ,data:{title:'网格粒子'}},
-    {path:'scene-switching', component:SceneSwitchingComponent ,data:{title:'场景切换'}},
+    {path:'scene-switching', component:SceneSwitchingComponent ,data:{title:'反射'}},
+    {path:'process_outline', component:OutlineComponent ,data:{title:'后期处理_outline'}},
+    
+
+    
 ];
 
 @NgModule({

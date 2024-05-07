@@ -7,6 +7,7 @@ import { EnergyShieldComponent } from './menu/demo/Shader/能量盾/energy-shiel
 import { EnergyHaloComponent } from './menu/demo/Shader/能量光环/energy-halo/energy-halo.component';
 import { ParticlesComponent } from './menu/demo/Shader/网格粒子/particles/particles.component';
 import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switching.component';
+import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switc
     EnergyShieldComponent,
     EnergyHaloComponent,
     ParticlesComponent,
-    SceneSwitchingComponent
+    SceneSwitchingComponent,
+    OutlineComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

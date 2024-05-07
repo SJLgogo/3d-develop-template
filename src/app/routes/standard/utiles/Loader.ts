@@ -5,8 +5,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { NearestFilter, sRGBEncoding, TextureLoader, VideoTexture } from 'three'
 import { TGALoader } from "three/examples/jsm/loaders/TGALoader";
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+import { OBJLoader } from 'three-stdlib'
 
-export enum LoaderType {
+enum LoaderType {
+    OBJ = 'OBJ',
     FBX = 'FBX',
     GLTF = 'GLTF',
     Texture = 'Texture',
@@ -31,6 +33,7 @@ export default class Loader {
 
     private declare gltfLoader: GLTFLoader
     private declare fbxLoader: FBXLoader
+    private declare objLoader: OBJLoader
     private declare textureLoader: TextureLoader
     private declare plyLoader: PLYLoader
     private declare rgbeLoader: RGBELoader
@@ -41,6 +44,7 @@ export default class Loader {
         this.fileLoaded = null!
 
         this.fbxLoader = new FBXLoader()
+        this.objLoader = new OBJLoader()
         this.textureLoader = new TextureLoader()
         this.plyLoader = new PLYLoader()
         this.rgbeLoader = new RGBELoader();
@@ -73,11 +77,14 @@ export default class Loader {
     private loadResource(resource: Resource) {
         const type = resource.type
 
-        let loader: GLTFLoader | FBXLoader | TextureLoader | PLYLoader;
+        let loader: GLTFLoader | FBXLoader | TextureLoader | PLYLoader | OBJLoader;
 
         switch (type) {
             case LoaderType.FBX:
                 loader = this.fbxLoader
+                break
+            case LoaderType.OBJ:
+                loader = this.objLoader
                 break
             case LoaderType.GLTF:
                 loader = this.gltfLoader

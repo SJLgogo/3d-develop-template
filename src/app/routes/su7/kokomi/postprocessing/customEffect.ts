@@ -1,8 +1,10 @@
-import { EffectComposer, RenderPass, ShaderPass } from "three-stdlib";
+import { EffectComposer, FXAAShader, RenderPass, ShaderPass } from "three-stdlib";
 import { Base } from "../Base/base";
 import { Component } from "../components/component";
 import * as THREE from "three";
 import { UniformInjector } from "../components/uniformInjector";
+import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
+import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
 
 const defaultVertexShader = /* glsl */ `
 uniform float iTime;
@@ -35,16 +37,19 @@ void main(){
 }
 `;
 
-export class CustomEffect extends Component{
+export class CustomEffect extends Component {
 
-    composer:any;
+    composer: any;
 
-    declare uniformInjector:UniformInjector;
+    declare uniformInjector: UniformInjector;
 
-    declare shaderPass:ShaderPass;
-    
+    declare shaderPass: ShaderPass;
 
-    constructor(base:Base , config:any={}){
+    declare outlinePass:OutlinePass;
+
+    outLineSelectedObjects:THREE.Object3D[]=[]
+
+    constructor(base: Base) {
         super(base)
 
         const composer = new EffectComposer(base.renderer)
@@ -56,31 +61,78 @@ export class CustomEffect extends Component{
     }
 
 
-    addShaderPass(config:any={}){
+    addShaderPass(config: any = {}) {
         const {
             vertexShader = defaultVertexShader,
             fragmentShader = defaultFragmentShader,
             uniforms = {},
-          } = config;
+        } = config;
         const uniformInjector = new UniformInjector(this.base);
         this.uniformInjector = uniformInjector
-        
+
         const customPass = new ShaderPass({
             vertexShader,
             fragmentShader,
-            uniforms:{
+            uniforms: {
                 ...{
                     tDiffuse: {
-                      value: null,
+                        value: null,
                     },
-                  },
+                },
                 ...uniformInjector.shaderToyUnidorms,
                 ...uniforms,
             }
         })
+        console.log({
+            ...{
+                tDiffuse: {
+                    value: null,
+                },
+            },
+            ...uniformInjector.shaderToyUnidorms,
+            ...uniforms,
+        });
+
         this.shaderPass = customPass;
         customPass.renderToScreen = true;
         this.composer.addPass(customPass);
+    }
+
+
+    /** outLinePass */
+    addOutLinePass(config:any={}) {
+        const outlinePass = new OutlinePass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            this.base.scene,
+            this.base.camera
+        );
+        this.outlinePass = outlinePass
+        const params ={...{
+            edgeStrength: 3.0,
+            edgeGlow: 2,
+            edgeThickness: 1.0,
+            pulsePeriod: 0,
+            visibleEdgeColor:'#ffffff',
+            hiddenEdgeColor :'#190a05',
+            usePatternTexture: false
+        } , ...config};
+        outlinePass.edgeStrength = params.edgeStrength;  // 粗细
+        outlinePass.edgeGlow = params.edgeGlow;  // 发光
+        outlinePass.edgeThickness = params.edgeThickness;  // 轮廓线宽度
+        outlinePass.pulsePeriod =  params.pulsePeriod //闪烁 
+        outlinePass.renderToScreen = true;
+        outlinePass.selectedObjects = this.outLineSelectedObjects;
+        outlinePass.visibleEdgeColor.set(params.visibleEdgeColor);
+        outlinePass.hiddenEdgeColor.set(params.hiddenEdgeColor);
+        this.composer.addPass(outlinePass);  // 必须在后
+        // 放在renderPass之后,解决环境变暗问题
+        const gammaCorrectionShader = new ShaderPass(GammaCorrectionShader);
+        this.composer.addPass(gammaCorrectionShader);
+
+        // 抗锯齿
+        const effectFXAA = new ShaderPass( FXAAShader );
+		effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+		this.composer.addPass( effectFXAA );
     }
 
     addExisting(): void {

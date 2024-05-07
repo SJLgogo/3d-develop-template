@@ -1,6 +1,5 @@
-import { LoaderType } from "src/app/routes/standard/utiles/Loader";
 import { Base } from "src/app/routes/su7/kokomi/Base/base";
-import { AssetManager } from "src/app/routes/su7/kokomi/components/assetManager";
+import { AssetManager, LoaderType } from "src/app/routes/su7/kokomi/components/assetManager";
 import * as THREE from "three";
 import { HaloMaterial } from "../../能量光环/Materials/HaloMaterial";
 import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LoaderType } from 'src/app/routes/standard/utiles/Loader';
 import { Base } from 'src/app/routes/su7/kokomi/Base/base';
-import { AssetManager } from 'src/app/routes/su7/kokomi/components/assetManager';
+import { AssetManager, LoaderType } from 'src/app/routes/su7/kokomi/components/assetManager';
 import { OrbitControls } from 'src/app/routes/su7/kokomi/controls/orbitControls';
 import { flatModel, getEnvmapFromHDRTexture } from 'src/app/routes/su7/kokomi/utils/misc';
 import * as THREE from 'three';

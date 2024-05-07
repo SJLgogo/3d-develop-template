@@ -1,9 +1,17 @@
 import { TextureLoader } from "three";
-import { GLTFLoader, FBXLoader, PLYLoader, RGBELoader, TGALoader, MeshoptDecoder } from "three-stdlib";
+import { GLTFLoader, FBXLoader, PLYLoader, RGBELoader, TGALoader, MeshoptDecoder, OBJLoader } from "three-stdlib";
 import { Base } from "../Base/base";
 import { Component } from "./component";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
-import { LoaderType } from "src/app/routes/standard/utiles/Loader";
+
+export enum LoaderType {
+    OBJ = 'OBJ',
+    FBX = 'FBX',
+    GLTF = 'GLTF',
+    Texture = 'Texture',
+    HDR = 'hdr',
+    TGA = 'tga'
+}
 
 
 interface Resource {
@@ -12,7 +20,7 @@ interface Resource {
     path: string
 }
 
-export class AssetManager extends Component{
+export class AssetManager extends Component {
 
     resources: { [key: string]: any } = {}; // 加载的模型资源
     total: number;
@@ -26,12 +34,13 @@ export class AssetManager extends Component{
 
     private declare gltfLoader: GLTFLoader
     private declare fbxLoader: FBXLoader
+    private declare objLoader: OBJLoader
     private declare textureLoader: TextureLoader
     private declare plyLoader: PLYLoader
     private declare rgbeLoader: RGBELoader
     private declare tgaLoader: TGALoader
-    
-    constructor(base:Base , config:any={}){
+
+    constructor(base: Base, config: any = {}) {
         super(base)
 
         const resourceList = config.resources
@@ -40,11 +49,12 @@ export class AssetManager extends Component{
         this.fileLoaded = null!
 
         this.fbxLoader = new FBXLoader()
+        this.objLoader = new OBJLoader()
         this.textureLoader = new TextureLoader()
         this.plyLoader = new PLYLoader()
         this.rgbeLoader = new RGBELoader();
         this.tgaLoader = new TGALoader()
-  
+
         const gltfLoader = new GLTFLoader()
         this.gltfLoader = gltfLoader
 
@@ -66,8 +76,8 @@ export class AssetManager extends Component{
         const meshoptDecoder = MeshoptDecoder();
         this.gltfLoader?.setMeshoptDecoder(meshoptDecoder);
     }
-    
-    
+
+
     onFileLoaded(callback: () => any) {
         this.fileLoaded = callback
     }
@@ -93,6 +103,9 @@ export class AssetManager extends Component{
             case LoaderType.FBX:
                 loader = this.fbxLoader
                 break
+            case LoaderType.OBJ:
+                loader = this.objLoader
+                break
             case LoaderType.GLTF:
                 loader = this.gltfLoader
                 break
@@ -105,7 +118,7 @@ export class AssetManager extends Component{
             default:
                 loader = this.textureLoader
         }
-        
+
 
         loader.load(
             resource.path,
@@ -121,7 +134,7 @@ export class AssetManager extends Component{
 
         this.fileLoaded && this.fileLoaded()
 
-        this.percentNum = Math.floor((this.totalSuccess / this.total)*100)
+        this.percentNum = Math.floor((this.totalSuccess / this.total) * 100)
 
 
         if (this.total === this.totalSuccess + this.totalFail) {

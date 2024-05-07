@@ -1,4 +1,4 @@
-import { LoaderType } from "src/app/routes/standard/utiles/Loader";
+import { LoaderType } from "../../kokomi/components/assetManager";
 
 export default [
     { name: 'car', type: LoaderType.GLTF, path: 'assets/su7/sm_car.gltf' },
