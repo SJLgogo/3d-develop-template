@@ -5,6 +5,7 @@ import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControl
 import { CustomEffect } from "src/app/routes/su7/kokomi/postprocessing/customEffect";
 import * as THREE from "three";
 import * as dat from 'dat.gui';
+import {Stats} from 'src/app/routes/su7/kokomi/components/state'
 
 export class Outline extends Base {
 
@@ -38,9 +39,6 @@ export class Outline extends Base {
     const am = new AssetManager(this, {
       resources: [
         { name: 'tree', type: LoaderType.OBJ, path: 'assets/models/obj/tree.obj' },
-        { name: 'tree', type: LoaderType.OBJ, path: 'assets/models/obj/tree.obj' },
-
-        
       ]
     })
     this.am = am
@@ -48,6 +46,8 @@ export class Outline extends Base {
     this.customEffect = new CustomEffect(this)
     this.customEffect.addOutLinePass()
     this.customEffect.addExisting()
+
+    new Stats(this)
 
     this.useCameraControls()
     this._mountMouseMoveEvent()

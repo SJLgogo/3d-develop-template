@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Base } from 'src/app/routes/su7/kokomi/Base/base';
 import { AssetManager, LoaderType } from 'src/app/routes/su7/kokomi/components/assetManager';
 import { OrbitControls } from 'src/app/routes/su7/kokomi/controls/orbitControls';
@@ -14,9 +14,13 @@ import { CustomEffect } from 'src/app/routes/su7/kokomi/postprocessing/customEff
   templateUrl: './scene-beaut.component.html',
   styleUrls: ['./scene-beaut.component.less']
 })
-export class SceneBeautComponent implements OnInit {
+export class SceneBeautComponent implements OnInit , OnDestroy {
 
   constructor() { }
+
+  ngOnDestroy(): void {
+    
+  }
 
   ngOnInit(): void {
     new Demo('#three')

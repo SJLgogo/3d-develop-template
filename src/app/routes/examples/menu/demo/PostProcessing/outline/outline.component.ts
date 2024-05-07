@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Outline } from './outline';
 
 @Component({
@@ -6,12 +6,18 @@ import { Outline } from './outline';
   templateUrl: './outline.component.html',
   styleUrls: ['./outline.component.less']
 })
-export class OutlineComponent implements OnInit {
+export class OutlineComponent implements OnInit , OnDestroy {
 
   constructor() { }
 
+  outline!:Outline;
+
+  ngOnDestroy(): void {
+    this.outline.destory()
+  }
+
   ngOnInit(): void {
-    new Outline('#three')
+   this.outline =  new Outline('#three')
   }
 
 }

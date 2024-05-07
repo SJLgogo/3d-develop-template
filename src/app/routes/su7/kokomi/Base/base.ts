@@ -23,6 +23,8 @@ class Base{
     clock:Clock;
 
 
+
+
     constructor(sel = "#sketch"){
         const camrea = new THREE.PerspectiveCamera(
             80,
@@ -64,7 +66,7 @@ class Base{
         this.clock = clock;
     
 
-        this.AxesHelper(200)
+        // this.AxesHelper(200)
 
         this.init();
     }

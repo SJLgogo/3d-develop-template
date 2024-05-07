@@ -1,10 +1,16 @@
-import { EffectComposer, FXAAShader, RenderPass, ShaderPass } from "three-stdlib";
 import { Base } from "../Base/base";
 import { Component } from "../components/component";
 import * as THREE from "three";
 import { UniformInjector } from "../components/uniformInjector";
 import { OutlinePass } from "three/examples/jsm/postprocessing/OutlinePass";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader";
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { FXAAShader } from "three-stdlib";
+
 
 const defaultVertexShader = /* glsl */ `
 uniform float iTime;
@@ -57,7 +63,6 @@ export class CustomEffect extends Component {
 
         const renderPass = new RenderPass(base.scene, base.camera);
         composer.addPass(renderPass);
-
     }
 
 
@@ -83,15 +88,6 @@ export class CustomEffect extends Component {
                 ...uniforms,
             }
         })
-        console.log({
-            ...{
-                tDiffuse: {
-                    value: null,
-                },
-            },
-            ...uniformInjector.shaderToyUnidorms,
-            ...uniforms,
-        });
 
         this.shaderPass = customPass;
         customPass.renderToScreen = true;

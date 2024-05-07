@@ -1,4 +1,4 @@
-import { LoaderType } from "../utiles/Loader";
+import { LoaderType } from "../../su7/kokomi/components/assetManager";
 
 export default [
     { name: 'man', type: LoaderType.FBX, path: 'assets/userModal/man.fbx' },

@@ -1,4 +1,4 @@
-import { LoaderType } from "src/app/routes/standard/utiles/Loader";
+import { LoaderType } from "../../su7/kokomi/components/assetManager";
 
 export default [
     { name: 'hdr', type: LoaderType.HDR, path: 'assets/hdr/1.hdr' },
