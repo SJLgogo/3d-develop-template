@@ -6,6 +6,7 @@ import { CameraControls } from 'src/app/routes/su7/kokomi/controls/cameraControl
 import { Environment } from 'src/app/routes/su7/kokomi/lights/environment';
 import { getEnvmapFromHDRTexture, flatModel } from 'src/app/routes/su7/kokomi/utils/misc';
 import * as THREE from 'three';
+import * as dat from 'dat.gui';
 
 @Component({
   selector: 'app-scene-switching',
@@ -28,6 +29,8 @@ class Demo extends Base {
   am: AssetManager;
 
   declare env: Environment;
+
+  declare material:THREE.MeshStandardMaterial;
 
   constructor(ele: string) {
     super(ele)
@@ -71,9 +74,9 @@ class Demo extends Base {
       const envMap = getEnvmapFromHDRTexture(this.renderer, am.resources["hdr"]);
       this.scene.environment = envMap;
       this.scene.background = envMap;
+
+      this._createDebug()
     })
-
-
   }
 
 
@@ -89,8 +92,9 @@ class Demo extends Base {
     const material = new THREE.MeshStandardMaterial({
       envMap: this.env.cubeRenderTarget.texture,
       roughness: 0.05, //材质的粗糙度 
-      metalness: 0.5,   //材质的金属度
+      metalness: 1,   //材质的金属度
     });
+    this.material = material;
     const sphere = new THREE.Mesh(geometry, material);
     sphere.position.set(0, 0, 0);
     this.scene.add(sphere);
@@ -102,6 +106,16 @@ class Demo extends Base {
     sphere2.position.set(20, 0, 0);
     this.scene.add(sphere2);
   }
+
+
+  _createDebug(){
+    const gui = new dat.GUI();
+    const energyFolder = gui.addFolder('球体参数')
+    energyFolder.add(this.material,'roughness').min(0).max(1).step(0.01).name('粗糙度')
+    energyFolder.add(this.material,'metalness').min(0).max(1).step(0.01).name('金属度')
+
+    energyFolder.open()
+}
 
 
 

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { InteractionManager } from "three.interactive";
 import { Animator } from "../components/animator";
 import { Clock } from "../components/Clock";
-import { EffectComposer } from "three-stdlib";
+import type { EffectComposer } from "three-stdlib";
 
 class Base{
 

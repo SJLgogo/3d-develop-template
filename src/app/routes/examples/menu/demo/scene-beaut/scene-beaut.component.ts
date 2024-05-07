@@ -8,6 +8,7 @@ import * as THREE from 'three';
 import { EffectComposer, RenderPass } from 'three-stdlib';
 import * as POSTPROCESSING from 'postprocessing';
 import { CameraControls } from 'src/app/routes/su7/kokomi/controls/cameraControls';
+import { CustomEffect } from 'src/app/routes/su7/kokomi/postprocessing/customEffect';
 
 @Component({
   selector: 'app-scene-beaut',
@@ -23,7 +24,6 @@ export class SceneBeautComponent implements OnInit {
   }
 
 }
-
 
 class Demo extends Base {
 
@@ -48,13 +48,13 @@ class Demo extends Base {
       resources: [
         { name: 'car', type: LoaderType.GLTF, path: 'assets/sketch/source/car.glb' },
         { name: 'hdr', type: LoaderType.HDR, path: "assets/sketch/source/env.hdr", },
+        { name: 'shaderBgc', type: LoaderType.Texture, path: "assets/images/bei.jpg", },
       ]
     })
     this.am = am
 
-
     this.useCameraControls()
-    
+
     this.am.on('ready', () => {
 
       const envMap = getEnvmapFromHDRTexture(this.renderer, am.resources["hdr"]);
@@ -67,7 +67,7 @@ class Demo extends Base {
 
       const modelParts = flatModel(model);
 
-     
+
       modelParts.forEach((item: any) => {
         if (item.material) {
           // emissive
@@ -79,7 +79,8 @@ class Demo extends Base {
         }
       });
 
-      const createPostprocessing = ()=>{
+
+      const createPostprocessing = () => {
         const composer = new POSTPROCESSING.EffectComposer(this.renderer, {
           frameBufferType: THREE.HalfFloatType,
           multisampling: 8,
@@ -107,11 +108,10 @@ class Demo extends Base {
         composer.addPass(effectPass);
 
         // 设置 renderer 的自动清除：
-        this.renderer.autoClear = true; 
+        this.renderer.autoClear = true;
       };
 
       createPostprocessing();
-
 
 
     })
@@ -121,11 +121,11 @@ class Demo extends Base {
 
   }
 
-  
-  useCameraControls(){
+
+  useCameraControls() {
     const cameraControls = new CameraControls(this)
     cameraControls.controls.setTarget(0, 0, 0);
-}
+  }
 
 
 
