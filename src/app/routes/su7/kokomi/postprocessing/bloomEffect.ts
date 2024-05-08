@@ -14,11 +14,21 @@ export class BloomEffect extends Component {
     bloomComposer: EffectComposer;
     finalComposer: EffectComposer;
 
-    bloomPass:UnrealBloomPass;
+    bloomPass: UnrealBloomPass;
+
+    darkMaterial = new THREE.MeshBasicMaterial({ color: 'black' });
+
+    materials: any;
+
+    bloomLayer: any;
 
 
-    constructor(base: Base, config = {}) {
+    constructor(base: Base, config: any = {}) {
         super(base)
+
+        const { materials, bloomLayer } = config
+        this.materials = materials
+        this.bloomLayer = bloomLayer
 
         const params: any = {
             ...{
@@ -68,7 +78,7 @@ export class BloomEffect extends Component {
 
                 void main() {
 
-                    gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+                    gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1. ) * texture2D( bloomTexture, vUv ) );
 
                 }
                 
@@ -78,7 +88,7 @@ export class BloomEffect extends Component {
         );
         mixPass.needsSwap = true;
 
-		const outputPass = new OutputPass();
+        const outputPass = new OutputPass();
 
         bloomComposer.addPass(renderPass);
         bloomComposer.addPass(bloomPass);
@@ -95,12 +105,40 @@ export class BloomEffect extends Component {
     }
 
     update() {
+        this.base.scene.traverse((obj) => this.darkenNonBloomed(obj))
         this.bloomComposer.render()
+
+        this.base.scene.traverse((obj) => this.restoreMaterial(obj))
+    }
+
+
+    darkenNonBloomed(obj: any) {
+        
+        if (obj.isMesh && this.bloomLayer.test(obj.layers) === false) {
+
+            this.materials[obj.uuid] = obj.material;
+            obj.material = this.darkMaterial;
+
+        }
+    }
+
+
+
+    restoreMaterial(obj: any) {
+
+        if (this.materials[obj.uuid]) {
+            obj.material = this.materials[obj.uuid];
+            delete this.materials[obj.uuid];
+        }
+
     }
 
 
     addExisting(): void {
         this.base.composer = this.finalComposer;
     }
+
+
+
 
 }

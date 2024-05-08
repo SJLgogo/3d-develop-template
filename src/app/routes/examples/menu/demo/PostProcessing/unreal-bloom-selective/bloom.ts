@@ -13,6 +13,8 @@ export class Bloom extends Base {
 
   declare bloomEffect:BloomEffect;
 
+  materials:any={};
+
   BLOOM_SCENE = 1;
   bloomLayer = new THREE.Layers();
 
@@ -30,7 +32,7 @@ export class Bloom extends Base {
     const camera = this.camera as THREE.PerspectiveCamera;
     camera.updateProjectionMatrix();
     const cameraPos = new THREE.Vector3(
-      0, 0, 8
+      10,10, 8
     );
     camera.position.copy(cameraPos);
     const lookAt = new THREE.Vector3(0, 0, 0);
@@ -46,13 +48,15 @@ export class Bloom extends Base {
     this.bloomLayer.set( this.BLOOM_SCENE );
 
 
-    this.bloomEffect =  new BloomEffect(this)
+    this.bloomEffect =  new BloomEffect(this  , {
+      materials:this.materials,
+      bloomLayer:this.bloomLayer
+    })
 
     this.useCameraControls()
     this._mountMouseClickEvent()
 
     this.am.on('ready', () => this._initReady())
-
 
 
   }
@@ -80,7 +84,7 @@ export class Bloom extends Base {
       sphere.position.normalize().multiplyScalar( Math.random() * 4.0 + 2.0 );
       sphere.scale.setScalar( Math.random() * Math.random() + 0.5 );
       this.scene.add( sphere );
-      if ( Math.random() < 0.25 ) sphere.layers.enable( this.BLOOM_SCENE );
+      if(Math.random()<0.25) sphere.layers.enable( this.BLOOM_SCENE );  // 启用了球体对象在“BLOOM_SCENE”场景中的显示
     }
 
   }
@@ -112,9 +116,9 @@ export class Bloom extends Base {
     const raycastSelector = new RaycastSelector(this)
     this.renderer.domElement.addEventListener('click',()=>{
       const interSects =  raycastSelector.getInterSects()
-      const object = interSects[0]?.object
+      const object:any= interSects[0]?.object
       if(object){
-					object.layers.toggle( this.BLOOM_SCENE );
+					object.layers.toggle( this.BLOOM_SCENE ); // 切换对象在“BLOOM_SCENE”场景中的显示状态
       }
     })
   }
@@ -125,3 +129,27 @@ export class Bloom extends Base {
   }
 
 }
+
+
+
+/**
+ * 使用bloomPass实现泛光思路 : 
+ * 
+ * 1.首先创建BloomPass对象 ，负责计算泛光效果
+ * 2.将bloomPass对象添加到泛光的EffectComposer (将带有泛光效果的场景渲染结果传递给第二个 EffectComposer) EffectComposer.renderToScreen = false
+ * 3.使用第二个 EffectComposer 渲染场景
+ * 
+ */
+
+
+/**
+ * 
+ * 问 : 
+ * 其实使用单个composer也能渲染出bloomPass效果 ，但使用两个composer可以即实现泛光也可以实现某些元素不泛光 ， 是这样吗
+ * 答：
+    虽然使用单个 EffectComposer 也可以实现 Bloom Pass 效果，但是使用两个 EffectComposer 可以更加灵活地控制场景中不同元素的泛光效果。
+    使用单个 EffectComposer 应用 Bloom Pass 时，整个场景中的所有元素都会受到泛光效果的影响，
+    而使用两个 EffectComposer 则可以实现对不同元素的不同处理，即一些元素受到泛光效果的影响，而另一些元素则不受影响。
+    比如，在第一个 EffectComposer 中应用 Bloom Pass，将带有泛光效果的场景渲染结果传递给第二个 EffectComposer，然后在第二个 EffectComposer 中再次渲染整个场景，但不应用 Bloom Pass，这样就可以实现一些元素不受泛光效果影响的效果。
+    因此，使用两个 EffectComposer 可以提供更加灵活和精细的控制，使得在同一个场景中可以实现不同元素的不同渲染效果。
+*/
