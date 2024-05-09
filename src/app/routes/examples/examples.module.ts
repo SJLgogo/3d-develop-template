@@ -9,6 +9,7 @@ import { ParticlesComponent } from './menu/demo/Shader/网格粒子/particles/pa
 import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switching.component';
 import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal-bloom-selective/unreal-bloom-selective.component';
+import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/unreal-bloom.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal
     SceneSwitchingComponent,
     OutlineComponent,
     UnrealBloomSelectiveComponent,
+    UnrealBloomComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

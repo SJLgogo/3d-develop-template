@@ -52,6 +52,9 @@ export class BloomEffect extends Component {
         bloomPass.radius = params.radius;
         this.bloomPass = bloomPass
 
+        /**
+        * 疑惑: 为什么要加 baseTexture
+        */
         const mixPass = new ShaderPass(
             new THREE.ShaderMaterial({
                 uniforms: {
@@ -70,6 +73,8 @@ export class BloomEffect extends Component {
 
 			}
                 `,
+                // 虽然 vUv 是整个场景的 UV 坐标，但通过采样 bloomTexture，实际上是在获取原始场景中每个像素的泛光效果，从而实现了整个场景的泛光效果。
+
                 fragmentShader: `
                 uniform sampler2D baseTexture;
                 uniform sampler2D bloomTexture;

@@ -8,6 +8,7 @@ import { ParticlesComponent } from './menu/demo/Shader/网格粒子/particles/pa
 import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switching.component';
 import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal-bloom-selective/unreal-bloom-selective.component';
+import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/unreal-bloom.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -16,7 +17,10 @@ const routes: Routes = [
     {path:'particles', component:ParticlesComponent ,data:{title:'网格粒子'}},
     {path:'scene-switching', component:SceneSwitchingComponent ,data:{title:'反射'}},
     {path:'process_outline', component:OutlineComponent ,data:{title:'后期处理_outline'}},
-    {path:'process_bloom', component:UnrealBloomSelectiveComponent ,data:{title:'后期处理_bloom'}},    
+    {path:'process_bloom', component:UnrealBloomSelectiveComponent ,data:{title:'后期处理_bloom_1'}},   
+    {path:'bloom', component:UnrealBloomComponent ,data:{title:'后期处理_bloom_2'}},   
+    
+    
     
 ];
 
