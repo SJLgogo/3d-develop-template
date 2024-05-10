@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'standard', loadChildren: () => import('./routes//standard/standard.module').then(m => m.StandardModule) },
   { path: 'su7', loadChildren: () => import('./routes/su7/su7.module').then(m => m.Su7Module) },
   { path: 'huiztech', loadChildren: () => import('./routes/huiztech-pro/huiztech-pro.module').then(m => m.HuiztechProModule) },
+  { path: 'fragment', loadChildren: () => import('./routes/fragment/fragment.module').then(m => m.FragmentModule) },
   { path: 'examples', component:MenuComponent , children:[
     {path:'' , loadChildren: () => import('./routes/examples/examples.module').then(m => m.ExamplesModule)}
   ] },
