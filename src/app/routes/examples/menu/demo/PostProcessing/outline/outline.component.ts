@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Outline } from './outline';
-
 @Component({
   selector: 'app-outline',
   templateUrl: './outline.component.html',

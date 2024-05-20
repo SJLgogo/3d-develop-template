@@ -63,7 +63,7 @@ export class Bloom extends Base {
 
   _initReady() {
     this._addObject()
-    this._initGui()
+    // this._initGui()
 
   }
 

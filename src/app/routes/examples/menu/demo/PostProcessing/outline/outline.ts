@@ -13,6 +13,8 @@ export class Outline extends Base {
 
   customEffect: CustomEffect;
 
+  gui:any;
+
   outLineParams = {
     edgeStrength: 3.0,
     edgeGlow: 0.0,
@@ -61,7 +63,7 @@ export class Outline extends Base {
 
     this._addObject()
     this._initLight()
-    this._initGui()
+    // this._initGui()
 
   }
 
@@ -107,6 +109,7 @@ export class Outline extends Base {
 
   _initGui() {
     const gui = new dat.GUI()
+    this.gui = gui;
     gui.add(this.outLineParams, 'edgeStrength', 0, 10).onChange((value) => {
       this.customEffect.outlinePass.edgeStrength = Number(value);
     });

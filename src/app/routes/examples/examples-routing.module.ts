@@ -9,6 +9,7 @@ import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switc
 import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal-bloom-selective/unreal-bloom-selective.component';
 import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/unreal-bloom.component';
+import { Demo2Component } from '../fragment/5.shader本来的用途/2.镜面反射/demo2.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -19,8 +20,8 @@ const routes: Routes = [
     {path:'process_outline', component:OutlineComponent ,data:{title:'后期处理_outline'}},
     {path:'process_bloom', component:UnrealBloomSelectiveComponent ,data:{title:'后期处理_bloom_1'}},   
     {path:'bloom', component:UnrealBloomComponent ,data:{title:'后期处理_bloom_2'}},   
-    
-    
+    {path:'shaderLight', component:Demo2Component ,data:{title:'shader光照模型'}},   
+
     
 ];
 

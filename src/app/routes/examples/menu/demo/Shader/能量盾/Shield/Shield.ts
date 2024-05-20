@@ -45,7 +45,7 @@ export default class Shield extends Base{
         this._createHelper()
         this._createPlayer()
         this._createShield()
-        this._createDebug()
+        // this._createDebug()
     }
 
 

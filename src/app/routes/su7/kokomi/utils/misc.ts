@@ -33,8 +33,9 @@ const getEnvmapFromHDRTexture = (
 };
 
 
+
 export {
     flatModel,
     printModel,
-    getEnvmapFromHDRTexture
+    getEnvmapFromHDRTexture,
 }
