@@ -32,8 +32,9 @@ void main(){
         3.计算镜面高光因子 
         4.计算镜面反射光
      */
-    vec3 reflectDir=reflect(-lightDir,vNormal);
-    vec3 viewDir=normalize(cameraPosition-vWorldPosition);
+    vec3 reflectDir=reflect(-lightDir,vNormal);  // 反射光方向
+
+    vec3 viewDir=normalize(cameraPosition-vWorldPosition);  // 眼睛刚需
 
     // float spec=dot(viewDir,reflectDir);  // 计算高光因子
 
@@ -42,7 +43,7 @@ void main(){
     float spec=dot(vNormal,halfVec);
 
     spec=max(spec,0.);
-    float shininess=32.;
+    float shininess=32.; 
     spec=pow(spec,shininess);
     vec3 specular=lightColor*spec;  // 计算镜面反射光
     col+=specular*objectColor;
