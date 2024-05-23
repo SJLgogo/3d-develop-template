@@ -20,7 +20,7 @@ export class SceneSwitchingComponent implements OnInit {
   ngOnInit(): void {
     new Demo('#three')
   }
-
+  
 }
 
 class Demo extends Base {

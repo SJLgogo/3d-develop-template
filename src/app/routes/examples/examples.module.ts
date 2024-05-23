@@ -10,6 +10,7 @@ import { SceneSwitchingComponent } from './menu/demo/scene-switching/scene-switc
 import { OutlineComponent } from './menu/demo/PostProcessing/outline/outline.component';
 import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal-bloom-selective/unreal-bloom-selective.component';
 import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/unreal-bloom.component';
+import { FireBallComponent } from './menu/demo/fire-ball/fire-ball/fire-ball.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/un
     OutlineComponent,
     UnrealBloomSelectiveComponent,
     UnrealBloomComponent,
+    FireBallComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

@@ -30,7 +30,7 @@ class Base{
             80,
             window.innerWidth / window.innerHeight,
             0.01,
-            1000
+            10000
         )
         camrea.position.z = 1;
         this.camera = camrea
