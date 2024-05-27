@@ -10,11 +10,11 @@ export class Point {
 
     time: number = 0
 
-    size:number=0;
+    size:number=1;
 
     mass = 1
 
-    a =0;
+    opacity = 1;
 
     constructor() {
 

@@ -17,7 +17,6 @@ export class Bloom extends Base {
     am: AssetManager;
 
 
-
     constructor(eleName: string) {
         super(eleName)
 
