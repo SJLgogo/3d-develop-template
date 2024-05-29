@@ -21,8 +21,6 @@ export class Points extends Force3 {
     sizes = new Float32Array(this.particleCount);
     opacities = new Float32Array(this.particleCount);
 
-    light = new ForcePointLight(0xff6600, 1, 1800, 1);
-
 
     moverList: Point[] = []
 
@@ -78,15 +76,8 @@ export class Points extends Force3 {
             blending: THREE.NormalBlending
         })
         const mesh = new THREE.Points(geometry, material)
-        this.mesh = mesh
-
-        
-
-        this.base.camera.position.copy(Util.getPolarCoord(Util.getRadian(25), 0, 1000));
-        this.light.setPolarCoord(Util.getRadian(25), 0, 200);
-
+        this.mesh = mesh   
     }
-
 
 
 
@@ -114,9 +105,6 @@ export class Points extends Force3 {
 
 
     load() {
-        this.applyHook(0, 0.08);
-        this.applyDrag(0.2);
-        this.updateVelocity();
         this.activateMover()
         this.updateMover()
     }
@@ -180,7 +168,6 @@ export class Points extends Force3 {
 
         this.updatePoints();
     }
-
 
     updatePoints() {
         this.mesh.geometry.attributes.position.needsUpdate = true;

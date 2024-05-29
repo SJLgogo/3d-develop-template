@@ -68,7 +68,6 @@ export class Fire extends Base {
     this.points = points
     points.initMesh(this)
     this.scene.add(points.mesh)
-    this.scene.add(points.light)
   }
 
   _render() {
