@@ -1,7 +1,6 @@
 import { Base } from "src/app/routes/su7/kokomi/Base/base";
 import { AssetManager, LoaderType } from "src/app/routes/su7/kokomi/components/assetManager";
 import * as THREE from "three";
-import { HaloMaterial } from "../../能量光环/Materials/HaloMaterial";
 import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControls";
 import { SphereMaterial } from "../Material/vertex/material";
 import { UniformInjector } from "src/app/routes/su7/kokomi/components/uniformInjector";
