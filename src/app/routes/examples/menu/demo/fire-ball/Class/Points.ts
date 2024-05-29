@@ -5,9 +5,11 @@ import { Point } from "./Point";
 import { Util } from "../util/util";
 import { Component } from "src/app/routes/su7/kokomi/components/component";
 import { Fire } from "./Fire";
+import { Force3 } from "./Force3";
+import { ForcePointLight } from "./ForcePointLight";
 
 
-export class Points extends Component {
+export class Points extends Force3 {
 
     declare mesh: any;
     geometry: any;
@@ -19,32 +21,33 @@ export class Points extends Component {
     sizes = new Float32Array(this.particleCount);
     opacities = new Float32Array(this.particleCount);
 
+    light = new ForcePointLight(0xff6600, 1, 1800, 1);
+
+
     moverList: Point[] = []
 
     last_time_activate = Date.now()
 
     gravity = new THREE.Vector3(0, 0.1, 0);
 
-    base: Fire;
+    declare base: Fire;
 
-    constructor(base: Fire) {
-        super(base)
-        this.base = base
+    constructor() {
+        super()
     }
 
-    initMesh() {
-        const geometry = new THREE.BufferGeometry();
+    initMesh(base: Fire) {
+        this.base = base
         for (let i = 0; i < this.particleCount; i++) {
 
             const mover = new Point()
-            mover.init(new THREE.Vector3(Util.getRandomInt(-1, 1), 0, 0));
+            mover.init(new THREE.Vector3(Util.getRandomInt(-100, 100), 0, 0));
             this.moverList.push(mover)
 
             var h = Util.getRandomInt(0, 45);
-            var s = Util.getRandomInt(60, 90);
+            var s = Util.getRandomInt(60, 120);
             var color = new THREE.Color('hsl(' + h + ', ' + s + '%, 50%)');
             color.toArray(this.colors, i * 3);
-
 
             this.positions[i * 3] = mover.velocity.x;
             this.positions[i * 3 + 1] = mover.velocity.y;
@@ -52,6 +55,11 @@ export class Points extends Component {
             this.opacities[i] = mover.opacity;
             this.sizes[i] = mover.size;
         }
+        this.initPoints()
+    }
+
+    initPoints() {
+        const geometry = new THREE.BufferGeometry();
         geometry.setAttribute('customColor', new THREE.BufferAttribute(this.colors, 3));
         geometry.setAttribute('position', new THREE.BufferAttribute(this.positions, 3))
         geometry.setAttribute('vertexOpacity', new THREE.BufferAttribute(this.opacities, 1));
@@ -61,8 +69,7 @@ export class Points extends Component {
         const material = new THREE.ShaderMaterial({
             uniforms: {
                 color: { value: new THREE.Color(0xffffff) },
-                // FireImg: { value: this.base.am.resources['fire'] },
-                FireImg: { value: this.createTexture()},
+                FireImg: { value: this.createTexture() },
             },
             fragmentShader: fragmentShader,
             vertexShader: vertexShader,
@@ -72,7 +79,15 @@ export class Points extends Component {
         })
         const mesh = new THREE.Points(geometry, material)
         this.mesh = mesh
+
+        
+
+        this.base.camera.position.copy(Util.getPolarCoord(Util.getRadian(25), 0, 1000));
+        this.light.setPolarCoord(Util.getRadian(25), 0, 200);
+
     }
+
+
 
 
     createTexture() {
@@ -99,6 +114,9 @@ export class Points extends Component {
 
 
     load() {
+        this.applyHook(0, 0.08);
+        this.applyDrag(0.2);
+        this.updateVelocity();
         this.activateMover()
         this.updateMover()
     }
@@ -109,7 +127,7 @@ export class Points extends Component {
         let now = Date.now();
 
         if (now - this.last_time_activate > 10) {
-            for (let i = 0; i < this.particleCount; i++) {
+            for (let i = 0; i < this.moverList.length; i++) {
                 const mover = this.moverList[i]
                 if (mover.is_active) continue;
                 var rad1 = Util.getRadian(Math.log(Util.getRandomInt(0, 256)) / Math.log(256) * 260);
@@ -117,13 +135,13 @@ export class Points extends Component {
                 var range = (1 - Math.log(Util.getRandomInt(32, 256)) / Math.log(256)) * 12;
                 var force = Util.getPolarCoord(rad1, rad2, range);
                 var vector = new THREE.Vector3();
-                var force = Util.getPolarCoord(rad1, rad2, range);
-                vector.add(new THREE.Vector3(0, 0, 0));
+
+                vector.add(this.velocity);
                 mover.activate();
                 mover.init(vector);
                 mover.applyForce(force);
-                mover.opacity = 0.4;
-                mover.size = Math.pow(12 - range, 2) * Util.getRandomInt(1, 24) / 100;
+                mover.opacity = 0.2;
+                mover.size = Math.pow(12 - range, 2) * Util.getRandomInt(1, 24) / 50;
                 count++;
                 if (count >= 6) break;
             }
@@ -138,18 +156,19 @@ export class Points extends Component {
             var mover = this.moverList[i];
             if (mover.is_active) {
                 mover.time++;
-                mover.applyForce(this.gravity);  // 增加向上的加速度
+                mover.applyForce(this.gravity);
+                mover.applyDrag(0.01);
                 mover.updateVelocity();
 
                 if (mover.time > 30) {
                     mover.size -= 0.7;
                     mover.opacity -= 0.009;
                 }
-                if (mover.size <= 0) {
+                if (mover.opacity <= 0) {
                     mover.init(new THREE.Vector3(0, 0, 0));
                     mover.time = 0;
                     mover.opacity = 0.0;
-                    // mover.inactivate();
+                    mover.inactivate();
                 }
             }
             this.positions[i * 3 + 0] = mover.velocity.x;

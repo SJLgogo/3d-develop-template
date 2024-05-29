@@ -28,6 +28,7 @@ export class Fire extends Base {
 
     this.useCameraControls();
 
+    // this.createBackground()
 
     const am = new AssetManager(this, {
       resources: [
@@ -37,14 +38,23 @@ export class Fire extends Base {
     this.am = am;
 
     this.am.on('ready', () => {
-
       this._initSketch()
       this.update(() => this._render())
     })
 
 
-
   }
+
+  createBackground () {
+    var geometry = new THREE.OctahedronGeometry(1500, 3);
+    var material = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        flatShading: true,
+        side: THREE.BackSide
+    });
+    const bg = new THREE.Mesh(geometry, material);
+    this.scene.add(bg);
+};
 
 
   useCameraControls() {
@@ -54,18 +64,16 @@ export class Fire extends Base {
 
 
   _initSketch() {
-    const points = new Points(this);
+    const points = new Points();
     this.points = points
-    points.initMesh()
+    points.initMesh(this)
     this.scene.add(points.mesh)
+    this.scene.add(points.light)
   }
-
-
 
   _render() {
     this.points.load()
   }
-
 
 
 }

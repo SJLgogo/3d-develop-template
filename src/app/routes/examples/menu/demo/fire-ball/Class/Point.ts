@@ -1,27 +1,25 @@
 import * as THREE from "three";
+import { Force3 } from "./Force3";
 
-export class Point {
+export class Point extends Force3 {
 
     is_active = false;
-
-    velocity: any = new THREE.Vector3();
-
-    acceleration = new THREE.Vector3();  // 加速度
 
     time: number = 0
 
     size:number=1;
 
-    mass = 1
-
-    opacity = 1;
+    opacity = 0;
 
     constructor() {
-
+        super()
     }
 
     init(vector: any) {
         this.velocity = vector.clone();
+        this.anchor = vector.clone();
+        this.acceleration.set(0, 0, 0);
+        this.time = 0;
     }
 
     activate() {
@@ -31,14 +29,4 @@ export class Point {
     inactivate(){
         this.is_active = false;
     }
-
-    applyForce(vector: any) {
-        this.acceleration.add(vector);
-    };
-
-
-    updateVelocity() {
-        this.acceleration.divideScalar(this.mass);
-        this.velocity.add(this.acceleration);
-      };
 }
