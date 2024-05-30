@@ -11,6 +11,7 @@ import { UnrealBloomSelectiveComponent } from './menu/demo/PostProcessing/unreal
 import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/unreal-bloom.component';
 import { FireBallComponent } from './menu/demo/fire-ball/fire-ball/fire-ball.component';
 import { ShaderFireComponent } from './menu/demo/shader-fire/shader-fire.component';
+import { BurnComponent } from './menu/demo/burn/burn.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ShaderFireComponent } from './menu/demo/shader-fire/shader-fire.compone
     UnrealBloomComponent,
     FireBallComponent,
     ShaderFireComponent,
+    BurnComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

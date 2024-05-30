@@ -11,6 +11,7 @@ import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/un
 import { Demo2Component } from '../fragment/5.shader本来的用途/2.镜面反射/demo2.component';
 import { FireBallComponent } from './menu/demo/fire-ball/fire-ball/fire-ball.component';
 import { ShaderFireComponent } from './menu/demo/shader-fire/shader-fire.component';
+import { BurnComponent } from './menu/demo/burn/burn.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -23,7 +24,10 @@ const routes: Routes = [
     {path:'bloom', component:UnrealBloomComponent ,data:{title:'后期处理_bloom_2'}},   
     {path:'shaderLight', component:Demo2Component ,data:{title:'shader光照模型'}},   
     {path:'fire-ball', component:FireBallComponent ,data:{title:'粒子实现燃烧'}},   
-    {path:'shaderFire', component:ShaderFireComponent ,data:{title:'shader实现燃烧'}},   
+    {path:'shaderFire', component:ShaderFireComponent ,data:{title:'shader实现燃烧'}},  
+    {path:'burn', component:BurnComponent ,data:{title:'燃烧置换转场'}},  
+    
+    
 ];
 
 @NgModule({
