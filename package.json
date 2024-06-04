@@ -23,6 +23,7 @@
     "camera-controls": "^2.8.3",
     "cannon-es": "^0.20.0",
     "cannon-es-debugger": "^1.0.0",
+    "easing-js": "^1.1.2",
     "glslify-loader": "^2.0.0",
     "gsap": "^3.12.4",
     "heatmap.js": "^2.0.5",

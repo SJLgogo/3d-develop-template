@@ -12,6 +12,8 @@ export class Burn extends Base {
 
     am: AssetManager;
 
+    resolution = new THREE.Vector2();
+
     constructor(eleName: string) {
         super(eleName)
 
@@ -27,8 +29,8 @@ export class Burn extends Base {
         const am = new AssetManager(this, {
             resources: [
                 { name: 'noise', type: LoaderType.Texture, path: 'assets/images/noise2.png' },
-                { name: 'img1', type: LoaderType.Texture, path: 'assets/images/bei.jpg' },
-                { name: 'img2', type: LoaderType.Texture, path: 'assets/images/noise.png' },
+                { name: 'img1', type: LoaderType.Texture, path: 'assets/images/image01.jpg' },
+                { name: 'img2', type: LoaderType.Texture, path: 'assets/images/image02.jpg' },
                 { name: 'img3', type: LoaderType.Texture, path: 'assets/images/image03.jpg' },
             ]
         })
@@ -41,24 +43,36 @@ export class Burn extends Base {
             noiseTex.wrapT = THREE.RepeatWrapping;  // 纹理在垂直方向重复
 
 
-            const imgTexes = Object.values(this.am.resources).slice(1);
-            
+            console.log(Object.values(this.am.resources));
+
+            const imgTexes = [
+                this.am.resources['img1'], this.am.resources['img2'], this.am.resources['img3']
+            ]
+
             this.imgGroup.start(noiseTex, imgTexes)
 
+            this.resizeWindow()
+
+
             this.scene.add(this.imgGroup)
-            
+
         })
 
-        this.update(()=>{
+        this.update(() => {
             this.imgGroup.update(this.clock.deltaTime)
-            
         })
     }
 
     useCameraControls() {
         const cameraControls = new CameraControls(this)
         cameraControls.controls.setTarget(0, 0, 0);
-      }
+    }
+
+
+    resizeWindow() {
+        this.resolution.set(document.body.clientWidth, window.innerHeight)
+        this.imgGroup.resize(this.camera, this.resolution)
+    }
 
 
 }

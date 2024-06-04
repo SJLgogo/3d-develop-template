@@ -32,10 +32,20 @@ const getEnvmapFromHDRTexture = (
   return envmap;
 };
 
+/** 动画函数 */
+const  easeInOutQuad = (t: number): number=> {
+  if (t < 0.5) {
+    return 2 * t * t;
+  } else {
+    return -1 + (4 - 2 * t) * t;
+  }
+}
+
 
 
 export {
     flatModel,
     printModel,
     getEnvmapFromHDRTexture,
+    easeInOutQuad
 }
