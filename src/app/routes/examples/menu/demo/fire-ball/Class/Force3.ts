@@ -12,7 +12,6 @@ export class Force3 {
 
     }
 
-
     // 更新速度
     updateVelocity() {
         this.acceleration.divideScalar(this.mass);  // 加速度除以质量

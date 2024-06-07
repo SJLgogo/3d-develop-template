@@ -20,7 +20,7 @@ export class Fire extends Base {
     const camera = this.camera;
     camera.updateProjectionMatrix();
     const cameraPos = new THREE.Vector3(
-      100, 100, 100
+      100, 0, 250
     );
     camera.position.copy(cameraPos);
     const lookAt = new THREE.Vector3(0, 0, 0);

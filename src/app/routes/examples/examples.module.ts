@@ -12,6 +12,7 @@ import { UnrealBloomComponent } from './menu/demo/PostProcessing/unreal-bloom/un
 import { FireBallComponent } from './menu/demo/fire-ball/fire-ball/fire-ball.component';
 import { ShaderFireComponent } from './menu/demo/shader-fire/shader-fire.component';
 import { BurnComponent } from './menu/demo/burn/burn.component';
+import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.component';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { BurnComponent } from './menu/demo/burn/burn.component';
     FireBallComponent,
     ShaderFireComponent,
     BurnComponent,
+    HyperSpaceComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

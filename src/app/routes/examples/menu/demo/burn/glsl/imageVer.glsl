@@ -31,5 +31,5 @@ void main(){
    vUpdateUv = updateUv;
    vTime = easeTransition;
 
-   gl_Position=projectionMatrix*modelViewMatrix*vec4(position+vec3(0,0,0),1.);
+   gl_Position=projectionMatrix*modelViewMatrix*vec4(position+vec3(0,0,height),1.);
 }
