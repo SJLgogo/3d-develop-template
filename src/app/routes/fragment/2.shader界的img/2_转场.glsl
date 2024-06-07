@@ -48,5 +48,5 @@ vec4 transition3(vec2 uv){
 void main(){
     vec2 uv = gl_FragCoord.xy / iResolution.xy;
     vec4 col=transition3(uv);
-    gl_FragColor = col;
+    gl_FragColor = vec4(uv);
 }

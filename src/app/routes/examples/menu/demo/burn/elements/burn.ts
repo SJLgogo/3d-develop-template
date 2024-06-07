@@ -29,7 +29,7 @@ export class Burn extends Base {
         const am = new AssetManager(this, {
             resources: [
                 { name: 'noise', type: LoaderType.Texture, path: 'assets/images/noise2.png' },
-                { name: 'img1', type: LoaderType.Texture, path: 'assets/images/image01.jpg' },
+                { name: 'img1', type: LoaderType.Texture, path: 'assets/images/bei.jpg' },
                 { name: 'img2', type: LoaderType.Texture, path: 'assets/images/image02.jpg' },
                 { name: 'img3', type: LoaderType.Texture, path: 'assets/images/image03.jpg' },
             ]

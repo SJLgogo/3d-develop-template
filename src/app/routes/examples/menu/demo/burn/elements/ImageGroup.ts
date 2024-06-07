@@ -33,7 +33,6 @@ export class ImageGroup extends THREE.Group {
             this.image.changeTex();
         } else {
             const easeStep = easeInOutQuad(Math.min(this.timeTransition / DURATION, 1.0));  // 动画
-            // console.log(this);
             this.image?.update(time, easeStep);
         }
     }

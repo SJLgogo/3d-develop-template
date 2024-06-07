@@ -20,7 +20,6 @@ void main(){
       (1.0 - imgRatio.y) *0.5
    );
 
-
    // 波浪
    float slide=texture2D(noiseTex,uv*vec2(.998)+.001).b;
    float mask=easeTransition*1.6-slide;
@@ -32,5 +31,5 @@ void main(){
    vUpdateUv = updateUv;
    vTime = easeTransition;
 
-   gl_Position=projectionMatrix*modelViewMatrix*vec4(position+vec3(0,0,height),1.);
+   gl_Position=projectionMatrix*modelViewMatrix*vec4(position+vec3(0,0,0),1.);
 }

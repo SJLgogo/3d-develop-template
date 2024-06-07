@@ -44,15 +44,15 @@ export class ImageMesh extends THREE.Mesh {
 
 
     changeTex() {
-        
         this.imgIndexPrev = this.imgIndexNext;
         this.imgIndexNext = (this.imgIndexNext + 1 >= this.imgTexes.length)
             ? 0
             : this.imgIndexNext + 1;
-        console.log(this.imgTexes ,  this.imgIndexPrev , this.imgIndexNext);
 
-        this.material.uniforms.imgPrevTex.value = this.imgTexes[this.imgIndexPrev];
-        this.material.uniforms.imgNextTex.value = this.imgTexes[this.imgIndexNext];
+        queueMicrotask(()=>{
+            this.material.uniforms.imgPrevTex.value = this.imgTexes[this.imgIndexPrev];
+            this.material.uniforms.imgNextTex.value = this.imgTexes[this.imgIndexNext];
+        })
     }
 
 

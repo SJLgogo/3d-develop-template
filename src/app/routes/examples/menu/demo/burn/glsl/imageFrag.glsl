@@ -10,12 +10,8 @@ varying vec2 vUpdateUv;
 varying float vTime;
 varying vec2 vUv;
 
+/** 燃烧实现 */
 void main(){
-    // vec2 uv=vUv;
-    
-    // vec3 tex=texture2D(imgPrevTex,uv).xyz;
-    
-    // gl_FragColor=vec4(tex,1.);
     
     vec2 ratio=vec2(
         min(imgRatio.x/imgRatio.y/3.*2.,1.),
@@ -48,3 +44,23 @@ void main(){
     gl_FragColor=vec4(color1+color2-color3,1.);
     
 }
+
+
+/** 实现 */
+// void main(){
+    
+    //     float noiseR=texture2D(noiseTex,vUpdateUv+vec2(time*.1,0.)).r;
+    //     float noiseG=texture2D(noiseTex,vUpdateUv+vec2(time*.2,0.)).g;
+    //     float slide=texture2D(noiseTex,vUv*vec2(.998)+.001).b;
+    
+    //     float mask=vTime*1.24-(slide*.6+noiseR*.2+noiseG*.2);
+    //     float maskPrev=1.-smoothstep(.12,.16,mask);
+    
+    //     vec4 imgPrev=texture2D(imgPrevTex,vUpdateUv);
+    //     vec4 imgNext=texture2D(imgNextTex,vUpdateUv);
+    
+    //     vec3 color1=imgPrev.rgb*maskPrev;
+    //     vec3 color2=imgNext.rgb;
+    
+    //     gl_FragColor=vec4(color1,1.);
+// }
