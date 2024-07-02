@@ -13,6 +13,8 @@ import { FireBallComponent } from './menu/demo/fire-ball/fire-ball/fire-ball.com
 import { ShaderFireComponent } from './menu/demo/shader-fire/shader-fire.component';
 import { BurnComponent } from './menu/demo/burn/burn.component';
 import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.component';
+import { ParticleTransformationComponent } from './menu/demo/particle-transformation/particle-transformation.component';
+import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
 
 
 @NgModule({
@@ -29,6 +31,8 @@ import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.compone
     ShaderFireComponent,
     BurnComponent,
     HyperSpaceComponent,
+    ParticleTransformationComponent,
+    PathAlgorithmComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

@@ -6,7 +6,6 @@ import { Force3 } from "../fire-ball/Class/Force3";
 
 export class HyperSpace extends Base {
 
-
     declare points: Points;
 
     constructor(eleName: string) {

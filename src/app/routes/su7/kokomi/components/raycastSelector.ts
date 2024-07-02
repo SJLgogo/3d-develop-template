@@ -15,7 +15,6 @@ export class RaycastSelector extends Component {
     getInterSects(targets = this.container.children) {
         this.raycaster.setFromCamera(this.base.interactionManager.mouse, this.base.camera);
         const intersects = this.raycaster.intersectObjects(targets, true);
-        // console.log('点击位置的三维坐标:', intersects[0]?.point);
         return intersects;
     }
 
@@ -37,6 +36,8 @@ export class RaycastSelector extends Component {
         const object = intersect.object;
         return target === object ? intersect : null;
     }
+
+    
 
 
 
