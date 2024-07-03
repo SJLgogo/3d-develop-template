@@ -6,12 +6,15 @@ import { RaycastSelector } from "src/app/routes/su7/kokomi/components/raycastSel
 import { RollOverMesh } from "./RollOverMesh";
 import { Cube } from "./Cube";
 import { aStar } from "../A-algorithm/aStar";
+import { PassGate } from "../A-algorithm/passGate";
 
 export class PathAlgorithm extends Base {
 
     grid: Grid;
 
-    cube:Cube;
+    // cube:Cube;
+
+    cubeList: Cube[] = [];
 
     rollOverMesh: RollOverMesh;
 
@@ -22,6 +25,8 @@ export class PathAlgorithm extends Base {
     raycaster = new THREE.Raycaster();
 
     objects: any = [];
+
+    passGate:PassGate;
 
     constructor(eleName: string) {
         super(eleName)
@@ -46,16 +51,23 @@ export class PathAlgorithm extends Base {
         rollOverMesh.addExisting();
         this.rollOverMesh = rollOverMesh;
 
-        const cube = new Cube(this);
-        cube.model.position.set(-475, 25, 475);
-        cube.addExisting();
-        const path = aStar( [-475, 475], [475, -475], 25)
-        cube.move(path);
-        this.cube = cube
+        const passGate = new PassGate(this);
+        this.passGate = passGate;
+        passGate.simulate();
+
+        for (let i = 0; i <= 10; i++) {
+            const cube = new Cube(this);
+            cube.model.position.set(-475, 25, 475);
+            cube.addExisting();
+            const path = aStar([-475, 475], [-25, 25], 25)
+            cube.move(path);
+            this.cubeList.push(cube);
+        }
 
 
-        // const path1 = aStar([],[0,0],[5,5] )
-        // console.log(path1);
+        
+        
+
 
     }
 
@@ -93,11 +105,12 @@ export class PathAlgorithm extends Base {
                 pointPos.copy(intersect.point).add(intersect.face.normal);
                 pointPos.divideScalar(50).floor().multiplyScalar(50).addScalar(25);
 
-                console.log(pointPos);
-                const {x,z} = this.cube.model.position;
+                for (let i = 0; i < this.cubeList.length; i++) {
+                    const { x, z } = this.cubeList[i].model.position;
+                    const path = aStar([x, z], [pointPos.x, pointPos.z], 25)
+                    this.cubeList[i].move(path);
+                }
 
-                const path = aStar([x,z], [pointPos.x, pointPos.z], 25)
-                this.cube.move(path);
             }
 
         })

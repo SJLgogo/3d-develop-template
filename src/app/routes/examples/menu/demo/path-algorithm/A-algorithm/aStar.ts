@@ -31,7 +31,7 @@ export const aStar = ( start: number[], end: number[] , defaultY:number = 0) => 
                 if (!openSet.elements.some(([_, n]) => n.x === neighbor.x && n.z === neighbor.z)) {
 
                     neighbor.g = tentativeG;
-                    const randomBias = 0 ; // 显著的随机偏差
+                    const randomBias = Math.random() * 10 ; // 显著的随机偏差
                     neighbor.h = manhattanDistance([neighbor.x, neighbor.z], [goalNode.x, goalNode.z]); // 启发式代价
                     neighbor.f = neighbor.g + neighbor.h + randomBias;
                     neighbor.parent = currentNode;
@@ -42,11 +42,8 @@ export const aStar = ( start: number[], end: number[] , defaultY:number = 0) => 
                 }
             }
         }
-
         closedSet.add(`${currentNode.x}-${currentNode.z}`);
-
         // console.log(openSet, closedSet);
-
     }
     return [];
 }
@@ -64,9 +61,9 @@ const getNeighbors = (node: any) => {
     const neighbors = [];
     const standard  = 50
     const directions8 = [
-        // { x: -standard, y: 0 }, { x: standard, y: 0 }, 
-        // { x: 0, y: -standard }, { x: 0, y: standard }, 
-        { x: -standard, y: -standard }, { x: standard, y: -standard }, { x: -standard, y: standard }, { x: standard, y: standard } // 对角线（如果需要）
+        { x: -standard, y: 0 }, { x: standard, y: 0 }, 
+        { x: 0, y: -standard }, { x: 0, y: standard }, 
+        { x: -standard, y: -standard }, { x: standard, y: -standard }, { x: -standard, y: standard }, { x: standard, y: standard } // 对角线
     ];
 
     const directions4level = [
@@ -79,14 +76,14 @@ const getNeighbors = (node: any) => {
         { x: 0, y: -standard }, { x: 0, y: standard }, 
     ];
 
-    const directions = Math.random() > 0.5 ? directions8 : Math.random() > 0.5 ? directions4level : directions4Vertical;
+    const directions = Math.random() > 0.5 ? directions4level : Math.random() > 0.5 ? directions8 : directions4Vertical;
 
 
     for (let dir of directions) {
         const newX = node.x + dir.x;
         const newZ = node.z + dir.y;
         // x , z 方向范围 
-        if (newX >= -1000 && newX <= 1000 && newZ >= -1000 && newZ <= 1000 && !Platform.collisionDetection(newX, newZ)) {
+        if (newX >= -500 && newX <= 500 && newZ >= -500 && newZ <= 500 && !Platform.collisionDetection(newX, newZ)) {
             neighbors.push(new Node(newX, 0, newZ));
         }
     }

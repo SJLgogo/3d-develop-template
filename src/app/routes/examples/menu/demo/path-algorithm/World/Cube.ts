@@ -26,13 +26,16 @@ export class Cube extends Component {
 
 
     move(path:number[][]) {
+        if(this.tween){
+            this.tween.stop();
+        }
 
         const curve: CatmullRomCurve3 = new CatmullRomCurve3(path!.map((i: number[]) => new THREE.Vector3(...i)))
         const curvePath = new THREE.CurvePath();
         curvePath.add(curve);
 
-        this.tween = new TWEEN.Tween({ t: 0 })
-            .to({ t: 1 }, 10000)
+        const newTween = new TWEEN.Tween({ t: 0 })
+            .to({ t: 1 }, 5000)
             .easing(TWEEN.Easing.Linear.None)
             .onStart(() => {
             })
@@ -43,6 +46,7 @@ export class Cube extends Component {
 
             })
             .start();
+        this.tween = newTween;    
     }
 
     update(time: number): void {

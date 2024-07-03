@@ -15,6 +15,7 @@ import { BurnComponent } from './menu/demo/burn/burn.component';
 import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.component';
 import { ParticleTransformationComponent } from './menu/demo/particle-transformation/particle-transformation.component';
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
+import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -31,6 +32,7 @@ const routes: Routes = [
     {path:'burn', component:BurnComponent ,data:{title:'燃烧置换转场'}},  
     {path:'hyperSpace', component:HyperSpaceComponent ,data:{title:'超空间'}},
     {path:'particleTransform', component:ParticleTransformationComponent ,data:{title:'粒子转换'}},
+    {path:'lineClip', component:LineClipComponent ,data:{title:'模型裁剪'}},
     {path:'pathAlgorith', component:PathAlgorithmComponent ,data:{title:'路径算法'}},
 ];
 

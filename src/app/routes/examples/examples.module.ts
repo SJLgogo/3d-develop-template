@@ -15,6 +15,7 @@ import { BurnComponent } from './menu/demo/burn/burn.component';
 import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.component';
 import { ParticleTransformationComponent } from './menu/demo/particle-transformation/particle-transformation.component';
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
+import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorith
     HyperSpaceComponent,
     ParticleTransformationComponent,
     PathAlgorithmComponent,
+    LineClipComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 
