@@ -7,6 +7,7 @@ import { RollOverMesh } from "./RollOverMesh";
 import { Cube } from "./Cube";
 import { aStar } from "../A-algorithm/aStar";
 import { PassGate } from "../A-algorithm/passGate";
+import { PersonSimluation } from "../A-algorithm/personSimulation";
 
 export class PathAlgorithm extends Base {
 
@@ -26,7 +27,7 @@ export class PathAlgorithm extends Base {
 
     objects: any = [];
 
-    passGate:PassGate;
+    personSimlutaion:PersonSimluation;
 
     constructor(eleName: string) {
         super(eleName)
@@ -51,9 +52,12 @@ export class PathAlgorithm extends Base {
         rollOverMesh.addExisting();
         this.rollOverMesh = rollOverMesh;
 
-        const passGate = new PassGate(this);
-        this.passGate = passGate;
-        passGate.simulate();
+
+        const personSimlutaion = new PersonSimluation();
+        this.personSimlutaion = personSimlutaion;
+        personSimlutaion.simulate();
+
+      
 
         for (let i = 0; i <= 10; i++) {
             const cube = new Cube(this);
