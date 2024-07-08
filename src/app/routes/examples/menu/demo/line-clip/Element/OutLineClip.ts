@@ -5,7 +5,7 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 import { MeshBVH, MeshBVHHelper, CONTAINED } from 'three-mesh-bvh';
 
 export class OutLineClip extends Component {
-    scaleValue = 4.8;
+    scaleValue = 1;
 
     params: any = {
         useBVH: true,
@@ -92,12 +92,11 @@ export class OutLineClip extends Component {
 
         // debug
         // this.group.add(frontSideModel, backSideModel, surfaceModel, colliderMesh, bvhHelper, outlineLines);
-
         this.group.add(colliderMesh, outlineLines);
 
-        const box = new THREE.Box3();
-        box.setFromObject(this.frontSideModel);
-        box.getCenter(this.group.position).multiplyScalar(- 1);
+        // const box = new THREE.Box3();
+        // box.setFromObject(this.frontSideModel);
+        // box.getCenter(this.group.position).multiplyScalar(- 1);
 
         this.group.updateMatrixWorld(true);
         
@@ -126,6 +125,7 @@ export class OutLineClip extends Component {
 
     dealModel(gltf: any) {
         let mergedGeometry = new THREE.BufferGeometry();
+        
         // 存储所有模型的几何体
         let geometries: any = [];
         gltf.scene.traverse((item: any) => {
@@ -147,9 +147,8 @@ export class OutLineClip extends Component {
         mergedMesh.position.y = -3.3
         mergedMesh.quaternion.identity();
         mergedMesh.applyMatrix4(gltf.scene.matrix)
+        mergedMesh.rotation.set(0, Math.PI, 0); 
         mergedMesh.updateMatrixWorld(true);
-        // this.container.add(mergedMesh)
-        console.log(mergedMesh);
 
         return mergedMesh
     }
@@ -166,9 +165,10 @@ export class OutLineClip extends Component {
         outlineLines.frustumCulled = false;
         outlineLines.renderOrder = 3;
 
-        // outlineLines.scale.copy(model.scale);
-        outlineLines.position.set(0, 0, 0);
-        outlineLines.quaternion.identity();
+        outlineLines.scale.copy(model.scale);
+        outlineLines.position.copy(model.position);
+        outlineLines.quaternion.copy(model.quaternion);
+        
 
         return outlineLines
     }

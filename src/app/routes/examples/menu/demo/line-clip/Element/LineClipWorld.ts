@@ -17,6 +17,10 @@ export class LineClipWorld extends Component{
 
     t2:any;
 
+    t1:any;
+
+    windLineBloom:any;
+
     constructor(base:LineClip){
         super(base)
     }
@@ -29,7 +33,7 @@ export class LineClipWorld extends Component{
 
     initClipPlane() {
         this.localPlane = new THREE.Plane(new THREE.Vector3(-1, 0, 0), 0);
-        this.localPlane.constant = 13
+        this.localPlane.constant = -260
     }
     
 
@@ -75,7 +79,7 @@ export class LineClipWorld extends Component{
           Enabled: true,
           Plane: 0
         }
-        folderLocal.add(propsLocal, 'Plane').min(-10000).max(10000).step(1).onChange((v) => {
+        folderLocal.add(propsLocal, 'Plane').min(-1000).max(1000).step(0.1).onChange((v) => {
           this.localPlane.constant = v;
           (this.base as LineClip).clipedge.planeMesh.position.z = v / (this.base as LineClip).clipedge.scaleValue + 0.05
         });
@@ -95,73 +99,56 @@ export class LineClipWorld extends Component{
           item.stencilWriteMask = 0xff
           item.stencilZPass = THREE.ReplaceStencilOp
           item.geometry.computeVertexNormals()
-          if (item.name === '平面') {
-            item.visible = false
-          }
-          if (item.name === 'topLigt') {
-            item.material.clippingPlanes = []
-            item.position.y = 6
-            item.scale.set(12, 0.04, 6)
-            // item.visible = false
-            item.material.emissiveIntensity = 0.52
-            // item.material.emissiveIntensity = 0
-            this.topLight = item
-          }
         }
       })
         this.container.add(gltf.scene)
     }
 
-    changeNormal() {
-      const clipedge = (this.base as LineClip).clipedge
-      this.topLight.material.emissiveIntensity = 0
-      this.localPlane.normal.set(0, 0, - 1);
-      this.localPlane.applyMatrix4(clipedge.planeMesh.matrixWorld);
-      this.t2 = gsap.timeline();
-      this.t2.to(this.localPlane, {
-        constant: 13,
-        duration: 2,
-        ease: 'power2.out',
-        onUpdate: () => {
-          clipedge.planeMesh.position.x = this.localPlane.constant
-        },
-        onComplete: () => {
-          // this.lineBloom.group.visible = false
-        },
-      })
-        .to(this.base.camera.position, {
-          z: 22,
-          duration: 1,
-          ease: 'power2.out',
-        }, ">")
-        .to(this.base.scene.fog, {
-          density: 0.01,
-          ease: 'power2.out'
-        }, "<")
-        .to(this.topLight.material, {
-          emissiveIntensity: 0.52,
-          ease: 'power2.out',
-        }, "<")
-        .to(this.base.scene.rotation, {
-          y: `-=${Math.PI * 1.3}`,
-          duration: 2,
-          ease: 'power2.out',
-          onComplete: () => {
-            // this.lineBloom.group.visible = false
-            this.localPlane.normal.set(0, 0, - 1);
-            this.localPlane.applyMatrix4((this.base as LineClip).clipedge.planeMesh.matrixWorld);
-            this.base.scene.updateMatrixWorld(true)
-          }
-        }, ">+1")
-    }
 
-    // addLineBloom(Curves:any) {
-    //   let lineBloom = new LineBloom(Curves)
-    //   lineBloom.group.visible = false
-    //   this.lineBloom = lineBloom
-    //   this.scene.add(lineBloom.group)
-    //   return lineBloom
-    // }
+    changeWind() {
+      this.t1 = gsap.timeline()
+      this.t1.to(this.base.scene.rotation, {
+        duration: 1,
+        ease: 'power2.out',
+        onComplete: () => {
+          this.base.scene.updateMatrixWorld(true)
+          this.localPlane.normal.set(0, 0, - 1);
+          this.base.clipedge.clippingPlanes[0].normal.set(0, 0, - 1)
+          this.localPlane.applyMatrix4(this.base.clipedge.planeMesh.matrixWorld);
+        }
+      })
+        // .to(this.topLight.material, {
+        //   emissiveIntensity: 0,
+        //   duration: 1,
+        //   ease: 'power2.out',
+        // }, "<")
+        // .to(this.base.scene.fog, {
+        //   density: 0.06,
+        //   duration: 1,
+        //   ease: 'power2.out',
+        // }, "<")
+        // .to(this.base.camera.position, {
+        //   z: 24,
+        //   duration: 1,
+        //   ease: 'power2.out',
+        // })
+        .to(this.localPlane, {
+          constant: 300,
+          duration: 5,
+          ease: 'power2.out',
+          onUpdate: () => {
+            this.base.clipedge.planeMesh.position.z = this.localPlane.constant
+          },
+          onStart: () => {
+            // this.isWindMode = true
+            // this.lineBloom.group.visible = true
+            // this.bloomEffect.selection.set([ this.base.clipedge.outlineLines, ...this.lineBloom.allLinesMesh])
+            this.bloomEffect.selection.set([ this.base.clipedge.outlineLines])
+          }
+        }, ">+2.5")
+    
+       
+    }
 
 }
 

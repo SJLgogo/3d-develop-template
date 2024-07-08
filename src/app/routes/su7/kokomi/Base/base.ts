@@ -21,6 +21,8 @@ class Base{
     interactionManager: InteractionManager;
 
     clock:Clock;
+   
+    clipedge: any;
 
     constructor(sel = "#sketch"){
         const camrea = new THREE.PerspectiveCamera(

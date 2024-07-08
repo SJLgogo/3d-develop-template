@@ -25,7 +25,7 @@ export class LineClip extends Base {
         super(eleName)
 
         const camera: any = this.camera;
-        camera.position.copy(new THREE.Vector3(0, 0, 22));
+        camera.position.copy(new THREE.Vector3(-358.77438399405463, 153.00048254218594, -471.581556865478));
         camera.fov = 35;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
         camera.updateProjectionMatrix();
@@ -76,9 +76,8 @@ export class LineClip extends Base {
         this.lineClipWorld.addExisting();
 
 
-        setTimeout(()=>{
-            this.lineClipWorld.changeNormal();
-        },5000)
+        this.lineClipWorld.changeWind();
+
     }
 
  
