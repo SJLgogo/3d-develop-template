@@ -1,34 +1,34 @@
 import * as dayjs from "dayjs";
-import { Queue } from "./personSimulation";
+import { Queue, User } from "./personSimulation";
 
-export class PassEscalator{
+export class PassGate {
 
     userProcessQueue: Queue = new Queue();
     userOutQueue: Queue = new Queue();
 
-    declare userQueue: Queue;
+    userQueue: Queue;
 
     gates: Gate[] = []
 
     parmas = {
-        passGateTime: 2000, // 通过时间
-        gateNum: 4, // 扶梯
+        passGateTime: 1000, // 通过时间
+        gateNum: 8, // 闸机
     }
 
-    constructor() {
+    constructor({ userQueue }: { userQueue: Queue }) {
+        this.userQueue = userQueue;
         for(let i=0 ;i<this.parmas.gateNum;i++){
             this.gates.push(
                 {
                     status: 0,
-                    in: { x: 60, y: 50 },
-                    out: { x: 70, y: 50 },
+                    in: { x: 1, y: 0 },
+                    out: { x: 1, y: 5 },
                 }
             )
         }
     }
 
-    simulate({ userQueue }: { userQueue: Queue }) {
-        this.userQueue = userQueue;
+    simulate() {
         let now = performance.now();
         const gates = this.gates;
 
@@ -45,7 +45,7 @@ export class PassEscalator{
                 gates[gateIndex].status = 1;
 
                 const user = this.userQueue.dequeue();
-                user.timeRecord.push({ t: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), remark: '进电梯', position: gates[gateIndex].in });
+                user.timeRecord.push({ t: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), remark: '进闸', position: gates[gateIndex].in });
                 this.userProcessQueue.enqueue(user);
             }
 
@@ -59,14 +59,14 @@ export class PassEscalator{
                     gates[gateIndex].status = 0;
 
                     const user = this.userProcessQueue.dequeue();
-                    user.timeRecord.push({ t: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), remark: '出电梯', position: gates[gateIndex].out  });
+                    user.timeRecord.push({ t: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'), remark: '出闸', position: gates[gateIndex].out  });
                     this.userOutQueue.enqueue(user);
                 }
                 now = performance.now()
             }
         }
 
-        console.log('出电梯人员队列:', this.userOutQueue);
+        console.log('出闸人员队列:', this.userOutQueue);
         return this.userOutQueue
 
     }
@@ -79,5 +79,7 @@ interface Gate {
     in: { x: number, y: number },
     out: { x: number, y: number },
 }
+
+
 
 

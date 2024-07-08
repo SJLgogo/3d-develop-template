@@ -16,6 +16,7 @@ import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.compone
 import { ParticleTransformationComponent } from './menu/demo/particle-transformation/particle-transformation.component';
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
 import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
+import { PathAlgorithm2Component } from './menu/demo/path-algorithm2/path-algorithm2.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
     ParticleTransformationComponent,
     PathAlgorithmComponent,
     LineClipComponent,
+    PathAlgorithm2Component,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

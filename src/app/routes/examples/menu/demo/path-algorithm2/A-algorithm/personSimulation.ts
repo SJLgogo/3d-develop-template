@@ -19,15 +19,15 @@ export class PersonSimluation {
 
     aSimulate:ASimulate;
 
-    initUserQueue = new Queue()
+    userQueue = new Queue()
     
     constructor() {
         this.initPosList();
         for (let index = 0; index < this.config.userNum; index++) {
-            this.initUserQueue.enqueue(new User('user_' + index))
+            this.userQueue.enqueue(new User('user_' + index))
         }
 
-        const passGate = new PassGate({ userQueue: this.initUserQueue });
+        const passGate = new PassGate({ userQueue: this.userQueue });
         this.passGate = passGate;
 
         const passEscalator = new PassEscalator();

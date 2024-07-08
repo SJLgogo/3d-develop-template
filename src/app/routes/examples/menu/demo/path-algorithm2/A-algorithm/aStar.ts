@@ -1,40 +1,9 @@
-import * as dayjs from "dayjs";
-import { Queue } from "./personSimulation";
 
-export class ASimulate{
-
-    declare userQueue:Queue;
-
-    newQueue:Queue = new Queue();
-
-    constructor(){
-    }
-
-    simulate({userQueue} :{userQueue:Queue}){
-
-        this.userQueue = userQueue;
-
-        while (this.userQueue.size()) {
-            const user = this.userQueue.dequeue()
-            const path = aStar([1,5],[60,50])
-            user.timeRecord.push({t:dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss') , path:path})
-            this.newQueue.enqueue(user)
-        }
-
-        console.log(this.newQueue);
-
-        return this.newQueue
-
-    }
-
-}
-
-
-const aStar = ( start: number[], end: number[] , defaultY:number = 0) => {
+export const aStar = ( start: number[], end: number[] , defaultY:number = 0) => {
     const closedSet = new Set<string>();
     const openSet = new PriorityQueue<Node>();
-    const startNode = new Node(start[0],  start[1]);
-    const goalNode = new Node(end[0], end[1]);
+    const startNode = new Node(start[0], defaultY, start[1]);
+    const goalNode = new Node(end[0], defaultY, end[1]);
 
     openSet.put(0, startNode); // 将起点加入优先队列
 
@@ -42,11 +11,11 @@ const aStar = ( start: number[], end: number[] , defaultY:number = 0) => {
         const currentNode: Node = openSet.get()!; // 从队列中取出当前优先级最高的节点
 
         if (currentNode.x == goalNode.x && currentNode.z == goalNode.z) {
-            const path: [number, number][] = [];
+            const path: [number, number, number][] = [];
             let current: Node | null = currentNode;
 
             while (current !== null) {
-                path.unshift([current.x, current.z]);
+                path.unshift([current.x, defaultY, current.z]);
                 current = current.parent;
             }
             return path;
@@ -90,7 +59,7 @@ const manhattanDistance = (point1: [number, number], point2: [number, number]): 
 // 获取周围点
 const getNeighbors = (node: any) => {
     const neighbors = [];
-    const standard  = 1
+    const standard  = 50
     const directions8 = [
         { x: -standard, y: 0 }, { x: standard, y: 0 }, 
         { x: 0, y: -standard }, { x: 0, y: standard }, 
@@ -114,8 +83,8 @@ const getNeighbors = (node: any) => {
         const newX = node.x + dir.x;
         const newZ = node.z + dir.y;
         // x , z 方向范围 
-        if (newX >= 0 && newX <= 100 && newZ >= 0 && newZ <= 100 && !Platform.collisionDetection(newX, newZ)) {
-            neighbors.push(new Node(newX, newZ));
+        if (newX >= -500 && newX <= 500 && newZ >= -500 && newZ <= 500 && !Platform.collisionDetection(newX, newZ)) {
+            neighbors.push(new Node(newX, 0, newZ));
         }
     }
 
@@ -147,17 +116,19 @@ class PriorityQueue<T> {
     }
 }
 
-class Node {
+export class Node {
 
     x: number = 0;
+    y: number = 0;
     z: number = 0;
     g: number = 0; // 实际代价
     h: number = 0; // 启发式代价
     f: number = 0; // 总代价
     parent: Node | null = null;
 
-    constructor(x: number, z: number) {
+    constructor(x: number, y: number, z: number) {
         this.x = x
+        this.y = y
         this.z = z
     }
 

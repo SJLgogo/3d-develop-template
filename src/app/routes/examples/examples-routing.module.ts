@@ -16,6 +16,7 @@ import { HyperSpaceComponent } from './menu/demo/hyper-space/hyper-space.compone
 import { ParticleTransformationComponent } from './menu/demo/particle-transformation/particle-transformation.component';
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
 import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
+import { PathAlgorithm2Component } from './menu/demo/path-algorithm2/path-algorithm2.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -34,6 +35,7 @@ const routes: Routes = [
     {path:'particleTransform', component:ParticleTransformationComponent ,data:{title:'粒子转换'}},
     {path:'lineClip', component:LineClipComponent ,data:{title:'模型裁剪'}},
     {path:'pathAlgorith', component:PathAlgorithmComponent ,data:{title:'路径算法'}},
+    {path:'pathAlgorith2', component:PathAlgorithm2Component ,data:{title:'路径算法仿真'}},
 ];
 
 @NgModule({
