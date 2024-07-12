@@ -17,6 +17,7 @@ import { ParticleTransformationComponent } from './menu/demo/particle-transforma
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
 import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
 import { PathAlgorithm2Component } from './menu/demo/path-algorithm2/path-algorithm2.component';
+import { StationArrowComponent } from './menu/demo/station-arrow/station-arrow.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { PathAlgorithm2Component } from './menu/demo/path-algorithm2/path-algori
     PathAlgorithmComponent,
     LineClipComponent,
     PathAlgorithm2Component,
+    StationArrowComponent,
   ],
   imports: [
     CommonModule , ExamplesRoutingModule 

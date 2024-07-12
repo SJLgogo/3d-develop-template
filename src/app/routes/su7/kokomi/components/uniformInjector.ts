@@ -18,7 +18,6 @@ export class UniformInjector extends Component {
 
     }
 
-
     injectShadertoyUniforms(uniforms:any = this.shaderToyUnidorms){
         uniforms.iTime.value = this.base.clock.elapsedTime
         uniforms.iTimeDelta.value = this.base.clock.deltaTime

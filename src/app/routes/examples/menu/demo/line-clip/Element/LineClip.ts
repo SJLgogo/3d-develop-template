@@ -6,6 +6,7 @@ import { CameraControls } from "src/app/routes/su7/kokomi/controls/cameraControl
 import * as THREE from "three";
 import { LineClipWorld } from "./LineClipWorld";
 import { OutLineClip } from "./OutLineClip";
+import { getEnvmapFromHDRTexture } from "src/app/routes/su7/kokomi/utils/misc";
 
 export class LineClip extends Base {
 
@@ -38,8 +39,7 @@ export class LineClip extends Base {
         const am = new AssetManager(this, {
             resources: [
                 { name: 'car', type: LoaderType.GLTF, path: 'assets/sketch/source/car.glb' },
-                // { name: 'car', type: LoaderType.GLTF, path: 'assets/glb/merge.gltf' },
-                // { name: 'carModel', type: LoaderType.GLTF, path: 'assets/glb/scene_editor.glb' },
+                { name: 'hdr', type: LoaderType.HDR, path: "assets/sketch/source/env.hdr", },
             ]
         })
         this.am = am
@@ -50,9 +50,10 @@ export class LineClip extends Base {
         const clipedge = new OutLineClip(this);
         this.clipedge = clipedge;
 
-        this.AxesHelper2(1000)
-
         this.am.on('ready', () => {
+            const envMap = getEnvmapFromHDRTexture(this.renderer, am.resources["hdr"]);
+            this.scene.environment = envMap;
+            
             this._init();
         })
     }
@@ -70,14 +71,19 @@ export class LineClip extends Base {
         cameraControls.controls.setTarget(0, 0, 0);
     }
 
+
     _init() {
+
+        // 初始化切割面 , composer
         this.lineClipWorld.init();
+
+        // 平面裁剪
         this.clipedge._init();
+
+        // 加入车辆模型
         this.lineClipWorld.addExisting();
 
-
-        this.lineClipWorld.changeWind();
-
+        // this.lineClipWorld.changeWind();
     }
 
  

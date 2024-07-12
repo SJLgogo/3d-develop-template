@@ -17,6 +17,7 @@ import { ParticleTransformationComponent } from './menu/demo/particle-transforma
 import { PathAlgorithmComponent } from './menu/demo/path-algorithm/path-algorithm.component';
 import { LineClipComponent } from './menu/demo/line-clip/line-clip.component';
 import { PathAlgorithm2Component } from './menu/demo/path-algorithm2/path-algorithm2.component';
+import { StationArrowComponent } from './menu/demo/station-arrow/station-arrow.component';
 
 const routes: Routes = [
     {path:'',redirectTo:'demo2'},
@@ -34,8 +35,14 @@ const routes: Routes = [
     {path:'hyperSpace', component:HyperSpaceComponent ,data:{title:'超空间'}},
     {path:'particleTransform', component:ParticleTransformationComponent ,data:{title:'粒子转换'}},
     {path:'lineClip', component:LineClipComponent ,data:{title:'模型裁剪'}},
+    {path:'arrow', component:StationArrowComponent ,data:{title:'箭头Shader'}},
+
+
     {path:'pathAlgorith', component:PathAlgorithmComponent ,data:{title:'路径算法'}},
     {path:'pathAlgorith2', component:PathAlgorithm2Component ,data:{title:'路径算法仿真'}},
+
+
+    
 ];
 
 @NgModule({

@@ -51,7 +51,6 @@ export class OutLineClip extends Component {
     localPlane = new THREE.Plane();
 
 
-
     clippingPlanes: any = [
         new THREE.Plane(),
     ];;
@@ -80,7 +79,6 @@ export class OutLineClip extends Component {
         surfaceModel.renderOrder = 1;
 
         const outlineLines = this.initLines(model)
-        this.outlineLines = outlineLines;
         let frontSideModel = this.iniFrontModel(model)
         this.frontSideModel = frontSideModel
         let backSideModel = this.iniBackModel()
@@ -89,7 +87,8 @@ export class OutLineClip extends Component {
         this.colliderBvh = colliderBvh
         this.colliderMesh = colliderMesh
         this.bvhHelper = bvhHelper
-
+        this.outlineLines = outlineLines;
+        
         // debug
         // this.group.add(frontSideModel, backSideModel, surfaceModel, colliderMesh, bvhHelper, outlineLines);
         this.group.add(colliderMesh, outlineLines);

@@ -44,7 +44,7 @@ export class LineClipWorld extends Component{
             luminanceThreshold: 0,
             luminanceSmoothing: 0.8,
             opacity: 0.6,
-            intensity: 3.0
+            intensity: 7.0
           });
           effect.inverted = true;  // 辉光效果将应用于未选中的对象
           effect.ignoreBackground = true  // 辉光效果将忽略背景
@@ -87,8 +87,6 @@ export class LineClipWorld extends Component{
 
     addExisting(){
       const gltf = (this.base as LineClip).am.resources['car']
-      // gltf.scene.scale.set(2, 2, 2)
-      gltf.scene.position.y = 0.2
       gltf.scene.name = 'carScene'
 
       gltf.scene.traverse((item:any) => {
