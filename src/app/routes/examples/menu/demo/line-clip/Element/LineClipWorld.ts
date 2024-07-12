@@ -21,6 +21,8 @@ export class LineClipWorld extends Component{
 
     windLineBloom:any;
 
+    modal:any;
+
     constructor(base:LineClip){
         super(base)
     }
@@ -91,14 +93,15 @@ export class LineClipWorld extends Component{
 
       gltf.scene.traverse((item:any) => {
         if (item.isMesh) {
-          item.material.clippingPlanes = [this.localPlane]
-          item.stencilRef = 1
-          item.stencilWrite = true
-          item.stencilWriteMask = 0xff
-          item.stencilZPass = THREE.ReplaceStencilOp
-          item.geometry.computeVertexNormals()
+          // item.material.clippingPlanes = [this.localPlane]
+          // item.stencilRef = 1
+          // item.stencilWrite = true
+          // item.stencilWriteMask = 0xff
+          // item.stencilZPass = THREE.ReplaceStencilOp
+          // item.geometry.computeVertexNormals()
         }
       })
+      this.modal = gltf.scene;
         this.container.add(gltf.scene)
     }
 

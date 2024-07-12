@@ -51,6 +51,7 @@ export class LineClip extends Base {
         this.clipedge = clipedge;
 
         this.am.on('ready', () => {
+            
             const envMap = getEnvmapFromHDRTexture(this.renderer, am.resources["hdr"]);
             this.scene.environment = envMap;
             
@@ -83,7 +84,6 @@ export class LineClip extends Base {
         // 加入车辆模型
         this.lineClipWorld.addExisting();
 
-        // this.lineClipWorld.changeWind();
     }
 
  

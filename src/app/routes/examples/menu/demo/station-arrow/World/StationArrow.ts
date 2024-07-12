@@ -55,7 +55,7 @@ export class StationArrow extends Base {
         });
         effect.inverted = true;  // 辉光效果将应用于未选中的对象
         effect.ignoreBackground = true  // 辉光效果将忽略背景
-        effect.selection.set([])  //清空选择集 所有对象都会应用辉光效果
+        effect.selection.set([this.arrowMesh])  //清空选择集 所有对象都会应用辉光效果
 
         let composerBloom = new EffectComposer(this.renderer);
         composerBloom.addPass(new RenderPass(this.scene, this.camera))
